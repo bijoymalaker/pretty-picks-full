@@ -5,7 +5,7 @@ import AboutUs from './pages/AboutUs.vue'
 import ContactUs from './pages/ContactUs.vue'
 import BlogPage from './pages/BlogPage.vue'
 import BlogPost from './components/BlogPost.vue'
-import Cart from './pages/Cart.vue'
+import Checkout from './pages/Checkout.vue'
 import ProductDetails from './components/ProductDetails.vue'
 import Login from './pages/Login.vue'
 import Register from './pages/Register.vue'
@@ -21,7 +21,7 @@ const routes = [
     { path: '/register',  component: Register },
     { path: '/blog/:id', name: 'blogPost', component: BlogPost },
     { path: '/product/:id', name: 'productPage', component: ProductPage },
-    { path: '/cart', component: Cart },
+    { path: '/checkout', component: Checkout },
     { path: '/pro', name: 'productDetails', component: ProductDetails },
     { path: '/:notFound(.*)', redirect: '/' },
 
