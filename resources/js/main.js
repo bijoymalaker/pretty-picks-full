@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import { createPinia } from 'pinia';
 import App from './App.vue'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap'
@@ -28,4 +29,4 @@ library.add(faHeart, faCartArrowDown, faFacebookF, faArrowTurnUp, faLocationDot,
 // Create the Vue app and mount it
 
 
-createApp(App).use(router).component('font-awesome-icon', FontAwesomeIcon).mount('#app')
+createApp(App).use(router).use(createPinia).component('font-awesome-icon', FontAwesomeIcon).mount('#app')
