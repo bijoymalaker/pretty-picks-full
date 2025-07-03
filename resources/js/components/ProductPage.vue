@@ -12,7 +12,7 @@
               <div class="card-body">
                 <h3 class="card-title">{{ product.title }}</h3>
                 <p class="card-text text-muted">{{ product.description }}</p>
-                <h4 class="text-primary mb-3">&#2547; {{ product.price }}</h4>
+                <h4 class="text-primary mb-3">&#2547; {{ Math.round( product.price * 125 )}}</h4>
                 <p v-if="product.discountPercentage" class="mb-2">
                   <span class="badge bg-warning text-dark">-{{ product.discountPercentage }}% OFF</span>
                 </p>

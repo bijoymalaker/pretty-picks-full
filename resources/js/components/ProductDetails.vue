@@ -23,7 +23,7 @@
             </div>
             <div class="col-md-6">
                 <h2>{{ product.name }}</h2>
-                <p>৳{{ product.price }}</p>
+                <p>৳ {{ Math.floor( product.price * 125 )  }}</p>
                 <button class="btn btn-primary">Add to Cart</button>
                 <div v-html="product.description"></div>
             </div>
