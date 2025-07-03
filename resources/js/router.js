@@ -10,6 +10,7 @@ import ProductDetails from './components/ProductDetails.vue'
 import Login from './pages/Login.vue'
 import Register from './pages/Register.vue'
 import ProductPage from './components/ProductPage.vue'
+import ProductManager from './pages/ProductManager.vue'
 
 const routes = [
     { path: '/', component: Home },
@@ -24,6 +25,7 @@ const routes = [
     { path: '/checkout', component: Checkout },
     { path: '/pro', name: 'productDetails', component: ProductDetails },
     { path: '/:notFound(.*)', redirect: '/' },
+    { path: '/pm', component: ProductManager }
 
     
 ];
