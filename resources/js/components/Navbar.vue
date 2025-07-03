@@ -32,14 +32,13 @@
                     </form>
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <RouterLink class="nav-link position-relative" to="/wishlist">
+                            <a class="nav-link position-relative" href="#" @click.prevent="openWishlistDrawer">
                                 <font-awesome-icon icon="fa-regular fa-heart" class="fs-4" />
-                                <span
-                                    class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-danger">
-                                    10+
-                                    <span class="visually-hidden">unread messages</span>
+                                <span class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ wishlist.length }}
+                                    <span class="visually-hidden">wishlist items</span>
                                 </span>
-                            </RouterLink>
+                            </a>
                         </li>
                         <li class="nav-item">
                             <RouterLink class="nav-link" to="/login">Login/Register</RouterLink>
@@ -54,16 +53,19 @@
                                 </span>
                             </a>
                         </li>
+                        
                     </ul>
                 </div>
             </div>
         </nav>
         <CartDrawer />
+        <WishlistDrawer />
     </div>
 </template>
 <script setup>
 import { ref, provide } from 'vue'
 import CartDrawer from './CartDrawer.vue'
+import WishlistDrawer from './WishlistDrawer.vue'
 
 const cart = ref([
     // Example product
@@ -90,6 +92,26 @@ function addToCart(product) {
     }
 }
 provide('addToCart', addToCart)
+
+const wishlist = ref([
+    // Example: { name: 'Wishlist Product', price: 99, image: 'https://via.placeholder.com/50' }
+])
+const wishlistDrawerOpen = ref(false)
+
+function openWishlistDrawer() {
+    wishlistDrawerOpen.value = true
+}
+
+provide('wishlist', wishlist)
+provide('wishlistDrawerOpen', wishlistDrawerOpen)
+provide('setWishlistDrawerOpen', (val) => { wishlistDrawerOpen.value = val })
+
+function addToWishlist(product) {
+    if (!wishlist.value.find(item => item.name === product.name)) {
+        wishlist.value.push(product)
+    }
+}
+provide('addToWishlist', addToWishlist)
 </script>
 <style scoped>
 

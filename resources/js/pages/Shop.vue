@@ -49,8 +49,8 @@
                                     <h5 class="card-title">{{ product.title }}</h5>
                                     <p class="card-text">{{ product.category }}</p>
                                     <p class="text-muted">
-                                        <s v-if="product.discount">&#2547; {{ product.originalPrice }}</s>
-                                        &#2547; {{ product.price }}
+                                        <s v-if="product.discount">&#2547; {{ Math.floor(product.originalPrice * 125) }}</s>
+                                        &#2547; {{ Math.floor(product.price * 125) }}
                                     </p>
                                     <router-link :to="{ name: 'productPage', params: { id: product.id } }"
                                         class="btn btn-primary">Read More</router-link>
