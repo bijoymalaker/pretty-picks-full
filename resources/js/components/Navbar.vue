@@ -2,26 +2,29 @@
     <div>
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container">
-                <RouterLink class="navbar-brand" to="/"><img src="../assets/images/logo/prettypicksLogo.png" alt="" srcset="" class="brand-logo">Pretty Picks</RouterLink>
+                <Link class="navbar-brand" :href="route('home')">
+                    <img src="../assets/images/logo/prettypicksLogo.png" alt="" class="brand-logo">
+                    Pretty Picks
+                </Link>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <RouterLink class="nav-link" to="/">Home</RouterLink>
+                            <Link class="nav-link" :href="route('home')">Home</Link>
                         </li>
                         <li class="nav-item">
-                            <RouterLink class="nav-link" to="/shop">Shop</RouterLink>
+                            <Link class="nav-link" :href="route('shop')">Shop</Link>
                         </li>
                         <li class="nav-item">
-                            <RouterLink class="nav-link" to="/about">About</RouterLink>
+                            <Link class="nav-link" :href="route('about')">About</Link>
                         </li>
                         <li class="nav-item">
-                            <RouterLink class="nav-link" to="/blog">Blog</RouterLink>
+                            <Link class="nav-link" :href="route('blog')">Blog</Link>
                         </li>
                         <li class="nav-item">
-                            <RouterLink class="nav-link" to="/contact">Contact</RouterLink>
+                            <Link class="nav-link" :href="route('contact')">Contact</Link>
                         </li>
                     </ul>
 
@@ -41,7 +44,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <RouterLink class="nav-link" to="/login">Login/Register</RouterLink>
+                            <Link class="nav-link" :href="route('login')">Login/Register</Link>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link position-relative" href="#" @click.prevent="openCartDrawer">
@@ -53,7 +56,6 @@
                                 </span>
                             </a>
                         </li>
-                        
                     </ul>
                 </div>
             </div>
@@ -62,8 +64,10 @@
         <WishlistDrawer />
     </div>
 </template>
+
 <script setup>
 import { ref, provide } from 'vue'
+import { Link } from '@inertiajs/vue3'
 import CartDrawer from './CartDrawer.vue'
 import WishlistDrawer from './WishlistDrawer.vue'
 
