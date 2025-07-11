@@ -1,4 +1,5 @@
 <template>
+  <AppLayouts>
     <div>
         <InnerPageBanner :innerBanner="innerBanner" />
         <div class="container my-4">
@@ -62,7 +63,14 @@
             </div>
         </div>
     </div>
+  </AppLayouts>
 </template>
+<script>
+import AppLayouts from '../layout/AppLayouts.vue';
+export default {
+  components: { AppLayouts }
+}
+</script>
 
 <script setup>
 import { ref, onMounted, computed } from "vue";

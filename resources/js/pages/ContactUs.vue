@@ -1,4 +1,5 @@
 <template>
+  <AppLayouts>
     <div>
         <h1 class="text-center my-4">Contact Us</h1>
         <form @submit.prevent="submitForm" class="container p-4 border rounded shadow-sm bg-light">
@@ -18,7 +19,9 @@
         </form>
 
     </div>
+  </AppLayouts>
 </template>
+import AppLayouts from '../layout/AppLayouts.vue';
 <script>
 export default {
     name: 'ContactUs',
@@ -35,7 +38,7 @@ export default {
 
     },
     components: {
-
+        AppLayouts
     }
 }
 </script>

@@ -13,8 +13,11 @@
 </template>
 
 <script setup>
-import Navbar from './components/Navbar.vue'
-import Footer from './components/Footer.vue'
-import ScrollToTop from './components/ScrollToTop.vue'
+import Navbar from '../components/Navbar.vue'
+import Footer from '../components/Footer.vue'
+import ScrollToTop from '../components/ScrollToTop.vue'
+
+</script>
+<style>
 
 </style>

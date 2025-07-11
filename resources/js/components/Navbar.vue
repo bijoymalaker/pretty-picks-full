@@ -3,14 +3,14 @@
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container">
                 <Link class="navbar-brand" :href="route('home')">
-                    <img src="../assets/images/logo/prettypicksLogo.png" alt="" class="brand-logo">
+                    <img :src="require('../assets/images/logo/prettypicksLogo.png')" alt="" class="brand-logo">
                     Pretty Picks
                 </Link>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ms-2">
                         <li class="nav-item">
                             <Link class="nav-link" :href="route('home')">Home</Link>
                         </li>
@@ -33,10 +33,10 @@
                             aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
-                    <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ms-2">
                         <li class="nav-item">
                             <a class="nav-link position-relative" href="#" @click.prevent="openWishlistDrawer">
-                                <font-awesome-icon icon="fa-regular fa-heart" class="fs-4" />
+                                <FontAwesomeIcon icon="fa-regular fa-heart" class="fs-4" />
                                 <span class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-danger">
                                     {{ wishlist.length }}
                                     <span class="visually-hidden">wishlist items</span>
@@ -48,7 +48,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link position-relative" href="#" @click.prevent="openCartDrawer">
-                                <font-awesome-icon icon="fa-solid fa-cart-arrow-down" class="fs-4" />
+                                <FontAwesomeIcon icon="fa-solid fa-cart-arrow-down" class="fs-4" />
                                 <span
                                     class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-danger">
                                     {{ cart.length }}
@@ -70,6 +70,10 @@ import { ref, provide } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import CartDrawer from './CartDrawer.vue'
 import WishlistDrawer from './WishlistDrawer.vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+// Register FontAwesomeIcon as a local component
+defineExpose({ FontAwesomeIcon })
 
 const cart = ref([
     // Example product

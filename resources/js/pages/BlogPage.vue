@@ -1,4 +1,5 @@
 <template>
+  <AppLayouts>
     <div>
         <InnerPageBanner :innerBanner="blogBanner"  />
         <div class="container my-4">
@@ -17,6 +18,8 @@
             </div>
         </div>
     </div>
+  </AppLayouts>
+import AppLayouts from '../layout/AppLayouts.vue';
 </template>
 
 <script>
@@ -29,6 +32,7 @@ export default {
     components: {
         InnerPageBanner,
         articles,
+        AppLayouts
     },
     data() {
         return {

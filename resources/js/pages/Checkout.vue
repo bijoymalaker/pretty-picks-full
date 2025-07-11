@@ -1,4 +1,5 @@
 <template>
+  <AppLayouts>
     <div class="container">
         <div class="row">
             <div class="col-md-8">
@@ -135,7 +136,14 @@
             </div>
         </div>
     </div>
+  </AppLayouts>
 </template>
+<script>
+import AppLayouts from '../layout/AppLayouts.vue';
+export default {
+  components: { AppLayouts }
+}
+</script>
 
 <script>
 export default {

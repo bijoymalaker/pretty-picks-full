@@ -1,4 +1,5 @@
 <template>
+  <AppLayouts>
     <section class="about-section">
         <div class="container">
             <div class="row">                
@@ -34,6 +35,8 @@
             </div>
         </div>
     </section>
+  </AppLayouts>
+import AppLayouts from '../layout/AppLayouts.vue';
 </template>
 <script>
 export default {
@@ -46,7 +49,7 @@ export default {
 
     },
     components: {
-
+        AppLayouts
     }
 }
 </script>

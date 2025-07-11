@@ -1,5 +1,6 @@
 <template>
-  <div class="container">
+  <AppLayouts>
+    <div class="container">
     <form
       @submit.prevent="handleSubmit"
       class="text-center border border-light p-5"
@@ -110,8 +111,15 @@
         </button>
       </div>
     </form>
-  </div>
+    </div>
+  </AppLayouts>
 </template>
+<script>
+import AppLayouts from '../layout/AppLayouts.vue';
+export default {
+  components: { AppLayouts }
+}
+</script>
 
 <script>
 export default {
