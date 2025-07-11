@@ -1,4 +1,5 @@
 <template>
+  <App>
   <div>
     <div id="carouselExample" class="carousel slide">
       <div class="carousel-inner">
@@ -65,9 +66,13 @@
 
 
   </div>
+  </App>
 </template>
 
 <script>
+    import App from '@/App.vue';
+    import { defineProps } from 'vue';
+    import { Link } from '@inertiajs/vue3';
 
     import Category from '../components/Category.vue';
     import Product from '../components/Product.vue';
@@ -98,6 +103,7 @@
     import clothes2 from '../assets/images/products/clothes2.jpg';
     import clothes3 from '../assets/images/products/clothes3.jpg';
     import clothes4 from '../assets/images/products/clothes4.jpg';
+
 
 
 export default {
@@ -215,8 +221,8 @@ export default {
 
   },
   components: {
-     Product, Category, Sections, DetailBanner, Ingredients, Articals
-  }
+     Product, Category, Sections, DetailBanner, Ingredients, Articals, App
+  },
 }
 </script>
 
