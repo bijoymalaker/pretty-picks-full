@@ -3,28 +3,18 @@
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container">
                 <Link class="navbar-brand" :href="route('home')">
-                    <img :src="logoUrl" alt="" class="brand-logo">
-                    Pretty Picks
+                <img src="../assets/images/logo/prettypicksLogo.png" alt="" class="brand-logo">
+                Pretty Picks
                 </Link>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
                     <ul class="navbar-nav ms-2">
-                        <li class="nav-item">
-                            <Link class="nav-link" :href="route('home')">Home</Link>
-                        </li>
-                        <li class="nav-item">
-                            <Link class="nav-link" :href="route('shop')">Shop</Link>
-                        </li>
-                        <li class="nav-item">
-                            <Link class="nav-link" :href="route('about')">About</Link>
-                        </li>
-                        <li class="nav-item">
-                            <Link class="nav-link" :href="route('blog')">Blog</Link>
-                        </li>
-                        <li class="nav-item">
-                            <Link class="nav-link" :href="route('contact')">Contact</Link>
+                        <li class="nav-item" v-for="item in navItems" :key="item.name">
+                            <Link class="nav-link" :href="route(item.route)" :class="{ active: isActive(item.route) }">
+                            {{ item.label }}
+                            </Link>
                         </li>
                     </ul>
 
@@ -37,14 +27,16 @@
                         <li class="nav-item">
                             <a class="nav-link position-relative" href="#" @click.prevent="openWishlistDrawer">
                                 <FontAwesomeIcon icon="fa-regular fa-heart" class="fs-4" />
-                                <span class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-danger">
+                                <span
+                                    class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-danger">
                                     {{ wishlist.length }}
                                     <span class="visually-hidden">wishlist items</span>
                                 </span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <Link class="nav-link" :href="route('login')">Login/Register</Link>
+                            <Link class="nav-link" :href="route('login')" :class="{ active: isActive('login') }">
+                            Login/Register</Link>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link position-relative" href="#" @click.prevent="openCartDrawer">
@@ -67,15 +59,17 @@
 
 <script setup>
 import { ref, provide } from 'vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
+import { route } from 'ziggy-js'
 import CartDrawer from './CartDrawer.vue'
 import WishlistDrawer from './WishlistDrawer.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { route } from 'ziggy-js'
-import logoUrl from '../assets/images/logo/prettypicksLogo.png'
 
-// Register FontAwesomeIcon as a local component
-defineExpose({ FontAwesomeIcon })
+const page = usePage()
+function isActive(routeName) {
+  // Compare the current route name from Ziggy with the nav item route name
+  return page.props.value?.ziggy?.route?.name === routeName;
+}
 
 const cart = ref([
     // Example product
@@ -122,13 +116,24 @@ function addToWishlist(product) {
     }
 }
 provide('addToWishlist', addToWishlist)
+
+const navItems = [
+    { name: 'home', route: 'home', label: 'Home' },
+    { name: 'shop', route: 'shop', label: 'Shop' },
+    { name: 'about', route: 'about', label: 'About' },
+    { name: 'blog', route: 'blog', label: 'Blog' },
+    { name: 'contact', route: 'contact', label: 'Contact' },
+]
 </script>
 <style scoped>
-
 .brand-logo {
     height: 35px;
     width: 35px;
     margin-right: 10px;
 }
 
+.nav-link.active {
+    color: #ff2222 !important;
+    font-weight: bold;
+}
 </style>
