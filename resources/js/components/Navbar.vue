@@ -3,13 +3,13 @@
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container">
                 <Link class="navbar-brand" :href="route('home')">
-                    <img :src="('../assets/images/logo/prettypicksLogo.png')" alt="" class="brand-logo">
+                    <img :src="logoUrl" alt="" class="brand-logo">
                     Pretty Picks
                 </Link>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
                     <ul class="navbar-nav ms-2">
                         <li class="nav-item">
                             <Link class="nav-link" :href="route('home')">Home</Link>
@@ -72,6 +72,7 @@ import CartDrawer from './CartDrawer.vue'
 import WishlistDrawer from './WishlistDrawer.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { route } from 'ziggy-js'
+import logoUrl from '../assets/images/logo/prettypicksLogo.png'
 
 // Register FontAwesomeIcon as a local component
 defineExpose({ FontAwesomeIcon })
