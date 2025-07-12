@@ -1,5 +1,4 @@
 <template>
-  <AppLayouts>
     <section class="vh-100" style="background-color: #eee">
       <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -39,12 +38,6 @@
                       <div class="d-flex flex-row align-items-center mb-4">
                         <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                         <div
-<script>
-import AppLayouts from '../layout/AppLayouts.vue';
-export default {
-  components: { AppLayouts }
-}
-</script>
                           data-mdb-input-init
                           class="form-outline flex-fill mb-0"
                         >
@@ -168,6 +161,7 @@ export default {
 <script>
 export default {
   name: "Register",
+  layout: () => import('../layout/AppLayouts.vue'),
   data() {
     return {
       form: {
@@ -225,4 +219,5 @@ export default {
   },
 };
 </script>
-<style></style>
+<style scoped>
+</style>

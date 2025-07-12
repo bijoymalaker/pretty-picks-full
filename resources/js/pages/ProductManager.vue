@@ -1,5 +1,4 @@
 <template>
-  <AppLayouts>
     <div class="container mt-4">
     <h2>Add Product</h2>
     <form @submit.prevent="addProduct" class="mb-4" method="post">
@@ -32,9 +31,7 @@
       </div>
     </div>
     </div>
-  </AppLayouts>
 </template>
-import AppLayouts from '../layout/AppLayouts.vue';
 
 <script setup>
 import { ref, onMounted } from 'vue'

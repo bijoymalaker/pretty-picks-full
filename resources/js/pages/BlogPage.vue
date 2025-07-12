@@ -1,5 +1,4 @@
 <template>
-  <AppLayouts>
     <div>
         <InnerPageBanner :innerBanner="blogBanner"  />
         <div class="container my-4">
@@ -18,21 +17,20 @@
             </div>
         </div>
     </div>
-  </AppLayouts>
-import AppLayouts from '../layout/AppLayouts.vue';
 </template>
 
 <script>
 import InnerPageBanner from '../components/innerpage/InnerPageBanner.vue';
 import innerBanner from '../assets/images/BlackWeddingJewelryLandscap.png';
 import { articles } from '../assets/blogs/blogs.js'; // Assuming you have a file with articles data
+import AppLayouts from '../layout/AppLayouts.vue';
 
 export default {
     name: 'BlogPage',
+    layout: AppLayouts,
     components: {
         InnerPageBanner,
         articles,
-        AppLayouts
     },
     data() {
         return {

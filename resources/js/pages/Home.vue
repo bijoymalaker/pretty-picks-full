@@ -1,6 +1,5 @@
 <template>
   <AppLayouts>
-    <div>
     <div id="carouselExample" class="carousel slide">
       <div class="carousel-inner">
         <div class="carousel-item active" v-for="(image, index) in bannerImages" :key="index" :data-bs-interval="2000">
@@ -65,14 +64,12 @@
 
 
 
-    </div>
-  </AppLayouts>
+  </AppLayouts >
 </template>
 
 <script>
     import AppLayouts from '../layout/AppLayouts.vue';
     import { defineProps } from 'vue';
-    import { Link } from '@inertiajs/vue3';
 
     import Category from '../components/Category.vue';
     import Product from '../components/Product.vue';
@@ -102,18 +99,13 @@
     import clothes1 from '../assets/images/products/clothes1.jpg';
     import clothes2 from '../assets/images/products/clothes2.jpg';
     import clothes3 from '../assets/images/products/clothes3.jpg';
-    import clothes4 from '../assets/images/products/clothes4.jpg';
+import clothes4 from '../assets/images/products/clothes4.jpg';
 
 
 
 export default {
+  
   name: 'HomePage',
-  props: defineProps({
-    products: Array,
-    titleMenu: Array,
-    anotherProducts: Array,
-    anotherTitleMenu: Array
-  }),
   data() {
     return {
       bannerImages: [
@@ -227,8 +219,9 @@ export default {
 
   },
   components: {
-     Product, Category, Sections, DetailBanner, Ingredients, Articals, AppLayouts
+     Product, Category, Sections, DetailBanner, Ingredients, Articals
   },
+  layout: AppLayouts,
 }
 </script>
 

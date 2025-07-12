@@ -1,5 +1,4 @@
 <template>
-  <AppLayouts>
     <div class="container">
         <div class="row">
             <div class="col-md-8">
@@ -136,59 +135,53 @@
             </div>
         </div>
     </div>
-  </AppLayouts>
 </template>
 <script>
 import AppLayouts from '../layout/AppLayouts.vue';
 export default {
-  components: { AppLayouts }
-}
-</script>
-
-<script>
-export default {
-    name: 'Checkout',
-    data() {
-        return {
-            cartItems: [
-                { name: 'AR VITAMIN C B3 GLUTAX10 SERUM (10ML)', price: 500 },
-                { name: 'TVLV YEAST COLLAGEN CREAM (50G)', price: 700 },
-            ],
-            billing: {
-                country: '',
-                name: '',
-                phone: '',
-                address: '',
-                district: '',
-                thana: '',
-                email: '',
-            },
-            shipping: {
-                address: '',
-            },
-            shipToDifferentAddress: false,
-            orderNotes: '',
-            paymentMethod: 'cashOnDelivery',
-        };
-    },
-    computed: {
-        subTotal() {
-            return this.cartItems.reduce((total, item) => total + item.price, 0);
-        },
-        total() {
-            return this.subTotal + 70; // Add shipping cost
-        },
-    },
-    methods: {
-        placeOrder() {
-            // Validate form and place order logic here
-            console.log('Billing Details:', this.billing);
-            console.log('Shipping Address:', this.shipToDifferentAddress ? this.shipping.address : this.billing.address);
-            console.log('Order Notes:', this.orderNotes);
-            console.log('Payment Method:', this.paymentMethod);
-            // ... send order data to server ...
-        },
-    },
+  name: 'Checkout',
+  layout: AppLayouts,
+  data() {
+      return {
+          cartItems: [
+              { name: 'AR VITAMIN C B3 GLUTAX10 SERUM (10ML)', price: 500 },
+              { name: 'TVLV YEAST COLLAGEN CREAM (50G)', price: 700 },
+          ],
+          billing: {
+              country: '',
+              name: '',
+              phone: '',
+              address: '',
+              district: '',
+              thana: '',
+              email: '',
+          },
+          shipping: {
+              address: '',
+          },
+          shipToDifferentAddress: false,
+          orderNotes: '',
+          paymentMethod: 'cashOnDelivery',
+      };
+  },
+  computed: {
+      subTotal() {
+          return this.cartItems.reduce((total, item) => total + item.price, 0);
+      },
+      total() {
+          return this.subTotal + 70; // Add shipping cost
+      },
+  },
+  methods: {
+      placeOrder() {
+          // Validate form and place order logic here
+          console.log('Billing Details:', this.billing);
+          console.log('Shipping Address:', this.shipToDifferentAddress ? this.shipping.address : this.billing.address);
+          console.log('Order Notes:', this.orderNotes);
+          console.log('Payment Method:', this.paymentMethod);
+          // ... send order data to server ...
+      },
+  },
 };
 </script>
 

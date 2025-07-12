@@ -1,5 +1,4 @@
 <template>
-  <AppLayouts>
     <div>
         <InnerPageBanner :innerBanner="innerBanner" />
         <div class="container my-4">
@@ -53,8 +52,7 @@
                                         <s v-if="product.discount">&#2547; {{ Math.floor(product.originalPrice * 125) }}</s>
                                         &#2547; {{ Math.floor(product.price * 125) }}
                                     </p>
-                                    <router-link :to="{ name: 'productPage', params: { id: product.id } }"
-                                        class="btn btn-primary">Read More</router-link>
+                                    <Link :href="route('productPage', { id: product.id })" class="btn btn-primary">Read More</Link>
                                 </div>
                             </div>
                         </div>
@@ -63,17 +61,16 @@
             </div>
         </div>
     </div>
-  </AppLayouts>
 </template>
-<script>
-import AppLayouts from '../layout/AppLayouts.vue';
-export default {
-  components: { AppLayouts }
-}
-</script>
-
 <script setup>
+import AppLayouts from '../layout/AppLayouts.vue';
+defineOptions({
+  name: 'Shop',
+  layout: AppLayouts,
+})
 import { ref, onMounted, computed } from "vue";
+import { Link } from '@inertiajs/vue3';
+import { route } from 'ziggy-js';
 import InnerPageBanner from "../components/innerpage/InnerPageBanner.vue";
 import innerBanner from '../assets/images/with_photosWeb_Banner_716_4jjhhj.webp';
 

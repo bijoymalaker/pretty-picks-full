@@ -3,7 +3,7 @@
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container">
                 <Link class="navbar-brand" :href="route('home')">
-                    <img :src="require('../assets/images/logo/prettypicksLogo.png')" alt="" class="brand-logo">
+                    <img :src="('../assets/images/logo/prettypicksLogo.png')" alt="" class="brand-logo">
                     Pretty Picks
                 </Link>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -71,6 +71,7 @@ import { Link } from '@inertiajs/vue3'
 import CartDrawer from './CartDrawer.vue'
 import WishlistDrawer from './WishlistDrawer.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { route } from 'ziggy-js'
 
 // Register FontAwesomeIcon as a local component
 defineExpose({ FontAwesomeIcon })

@@ -1,5 +1,4 @@
 <template>
-  <AppLayouts>
     <div class="container">
     <form
       @submit.prevent="handleSubmit"
@@ -112,17 +111,11 @@
       </div>
     </form>
     </div>
-  </AppLayouts>
 </template>
 <script>
-import AppLayouts from '../layout/AppLayouts.vue';
 export default {
-  components: { AppLayouts }
-}
-</script>
-
-<script>
-export default {
+  name: 'Login',
+  layout: () => import('../layout/AppLayouts.vue'),
   data() {
     return {
       email: "",
