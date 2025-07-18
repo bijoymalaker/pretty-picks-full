@@ -7,29 +7,29 @@ Route::get('/', function () {
     return Inertia::render('Home');
 })->name('home');
 
-Route::get('/shop', function () {
+Route::get('shop', function () {
     return Inertia::render('Shop');
 })->name('shop');
 
-Route::get('/about', function () {
+Route::get('about', function () {
     return Inertia::render('AboutUs');
 })->name('about');
 
-Route::get('/contact', function () {
+Route::get('contact', function () {
     return Inertia::render('ContactUs');
 })->name('contact');
 
-Route::get('/blog', function () {
+Route::get('blog', function () {
     return Inertia::render('BlogPage');
 })->name('blog');
 
-Route::get('/login', function () {
-    return Inertia::render('Login');
-})->name('login');
+// Route::get('/login', function () {
+//     return Inertia::render('Login');
+// })->name('login');
 
-Route::get('/register', function () {
-    return Inertia::render('Register');
-})->name('register');
+// Route::get('/register', function () {
+//     return Inertia::render('Register');
+// })->name('register');
 
 Route::get('/blog/{id}', function ($id) {
     return Inertia::render('BlogPost', ['id' => $id]);
