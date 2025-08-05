@@ -66,11 +66,11 @@
     </form>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import { Link } from '@inertiajs/vue3'
-import {route} from 'ziggy-js'
-import AppLayouts from '../layout/AppLayouts.vue'
+import { Link, useForm } from '@inertiajs/vue3'
+import { route } from 'ziggy-js'
+import AppLayouts from '../../layout/AppLayouts.vue'
 defineOptions({
   name: 'Login',
   layout: AppLayouts,
@@ -82,7 +82,13 @@ const remember = ref(false)
 const emailError = ref("")
 const passwordError = ref("")
 
-function validateEmail(email) {
+const form = useForm({
+  email: '',
+  password: '',
+  remember: false as boolean
+})
+
+function validateEmail(email: string): boolean {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   return re.test(email)
 }
@@ -91,6 +97,7 @@ function handleSubmit() {
   emailError.value = ""
   passwordError.value = ""
   let valid = true
+  
   if (!email.value) {
     emailError.value = "Email is required."
     valid = false
@@ -98,6 +105,7 @@ function handleSubmit() {
     emailError.value = "Please enter a valid email address."
     valid = false
   }
+  
   if (!password.value) {
     passwordError.value = "Password is required."
     valid = false
@@ -105,14 +113,24 @@ function handleSubmit() {
     passwordError.value = "Password must be at least 6 characters."
     valid = false
   }
+  
   if (valid) {
-    alert(
-      "Login successful!" +
-      JSON.stringify({
-        email: email.value,
-        password: password.value,
-      })
-    )
+    // Update form data
+    form.email = email.value
+    form.password = password.value
+    form.remember = remember.value
+    
+    // Submit form using Inertia
+    form.post(route('login'), {
+      onError: (errors) => {
+        if (errors.email) {
+          emailError.value = errors.email
+        }
+        if (errors.password) {
+          passwordError.value = errors.password
+        }
+      }
+    })
   }
 }
 </script>
