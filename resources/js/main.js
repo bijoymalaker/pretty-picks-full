@@ -46,7 +46,10 @@ router.on('error', () => NProgress.done())
 
 
 createInertiaApp({
-    resolve: name => import(`./pages/${name}.vue`),
+    resolve: name => {
+    const pages = import.meta.glob('./pages/**/*.vue', { eager: true });
+    return pages[`./pages/${name}.vue`];
+  },
     setup({ el, App, props, plugin }) {
         const vueApp = createApp({ render: () => h(App, props) })
             .use(plugin)
