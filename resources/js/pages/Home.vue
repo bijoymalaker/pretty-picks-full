@@ -67,9 +67,8 @@
   </AppLayouts >
 </template>
 
-<script>
+<script lang="ts">
     import AppLayouts from '../layout/AppLayouts.vue';
-    import { defineProps } from 'vue';
 
     import Category from '../components/Category.vue';
     import Product from '../components/Product.vue';
