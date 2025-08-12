@@ -96,8 +96,7 @@ defineOptions({
 import { ref, onMounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
-import InnerPageBanner from "../components/innerpage/InnerPageBanner.vue";
-import innerBanner from '../assets/images/with_photosWeb_Banner_716_4jjhhj.webp';
+
 
 interface Product {
     id: number;
