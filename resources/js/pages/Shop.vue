@@ -50,18 +50,12 @@
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
                         <div class="col" v-for="product in filteredProducts" :key="product.id">
                             <div class="card h-100">
-                                <img :src="getProductImage(product)" class="card-img-top" :alt="product.title" />
+                                <img :src="getProductImage(product)" class="card-img-top" :alt="product.name" />
                                 <div class="card-body">
-                                    <h5 class="card-title">{{ product.title }}</h5>
-                                    <p class="card-text text-capitalize">{{ product.category }}</p>
+                                    <h5 class="card-title">{{ product.name }}</h5>
+                                    <p class="card-text text-capitalize">{{ product.collection || 'Uncategorized' }}</p>
                                     <p class="text-muted">
-                                        <s v-if="product.discountPercentage > 0">
-                                            ${{ Math.floor(product.price / (1 - product.discountPercentage / 100)) }}
-                                        </s>
-                                        ${{ Math.floor(product.price) }}
-                                        <span v-if="product.discountPercentage > 0" class="badge bg-success">
-                                            {{ product.discountPercentage }}% OFF
-                                        </span>
+                                        ${{ Math.floor(Number(product.price)) }}
                                     </p>
                                     <Link :href="route('productPage', { id: product.id })" class="btn btn-primary btn-sm">View Details</Link>
                                 </div>
@@ -73,92 +67,83 @@
         </div>
     </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import AppLayout from '@/layout/AppLayouts.vue';
 defineOptions({
   name: 'Shop',
   layout: AppLayout,
 })
-import { ref, onMounted, computed } from "vue";
+import { ref, computed } from "vue";
 import { Link } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
 import InnerPageBanner from "../components/innerpage/InnerPageBanner.vue";
 import innerBanner from '../assets/images/with_photosWeb_Banner_716_4jjhhj.webp';
 
+interface Product {
+    id: number;
+    name: string;
+    price: string | number;
+    description?: string;
+    collection?: string;
+    image?: string;
+}
+
+// Props from backend
+const props = defineProps<{
+    products: Product[]
+}>();
+
 const priceRange = ref([0, 2000]);
-const products = ref([]);
 const filters = ref({
     onSale: false,
     inStock: false,
 });
 
-// Categories matching dummyjson.com
-const categories = [
-    "All",
-    "beauty",
-    "womens-bags",
-    "womens-dresses",
-    "womens-jewellery",
-    "womens-shoes",
-    "womens-watches",
-];
+// Categories based on collections from backend
+const categories = computed(() => {
+    const allCollections = props.products.map((product: Product) => product.collection || 'Uncategorized');
+    const uniqueCollections = [...new Set(allCollections)];
+    return ['All', ...uniqueCollections.filter(Boolean)];
+});
 
-const selectedCategory = ref(categories[0]);
+const selectedCategory = ref('All');
 
-function selectCategory(category) {
+function selectCategory(category: string) {
     selectedCategory.value = category;
 }
 
-const getProductImage = (product) => {
-    if (product.images && Array.isArray(product.images) && product.images.length > 0) {
-        return product.images[0];
+const getProductImage = (product: Product): string => {
+    if (product.image) {
+        return `/storage/${product.image}`;
     }
     return 'https://via.placeholder.com/300x200?text=No+Image';
 };
 
-const fetchProducts = async () => {
-    try {
-        const allProducts = [];
-        // Skip "All" when fetching
-        for (const category of categories.slice(1)) {
-            const response = await fetch(
-                `https://dummyjson.com/products/category/${category}`
-            );
-            const data = await response.json();
-            if (data.products) {
-                allProducts.push(...data.products);
-            }
-        }
-        products.value = allProducts;
-    } catch (error) {
-        console.error("Error Fetching products", error);
-    }
-};
-
-onMounted(fetchProducts);
-
 const filteredProducts = computed(() => {
-    let filtered = products.value;
+    let filtered = props.products;
     
-    // Category filter
+    // Category filter (using collection as category)
     if (selectedCategory.value !== "All") {
-        filtered = filtered.filter(product => 
-            product.category.toLowerCase() === selectedCategory.value.toLowerCase()
+        filtered = filtered.filter((product: Product) => 
+            (product.collection || 'Uncategorized').toLowerCase() === selectedCategory.value.toLowerCase()
         );
     }
     
     // Price range filter
-    filtered = filtered.filter(product => 
-        product.price >= priceRange.value[0] && product.price <= priceRange.value[1]
-    );
+    filtered = filtered.filter((product: Product) => {
+        const price = typeof product.price === 'string' ? parseFloat(product.price) : product.price;
+        return price >= priceRange.value[0] && price <= priceRange.value[1];
+    });
     
-    // Stock status filters
-    if (filters.value.onSale) {
-        filtered = filtered.filter(product => product.discountPercentage > 0);
+    // Stock status filters - simplified for now
+    if (filters.value.inStock) {
+        // For now, assume all products are in stock
+        filtered = filtered.filter(() => true);
     }
     
-    if (filters.value.inStock) {
-        filtered = filtered.filter(product => product.availabilityStatus === 'InStock');
+    if (filters.value.onSale) {
+        // For now, assume no products are on sale
+        filtered = filtered.filter(() => false);
     }
     
     return filtered;

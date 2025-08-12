@@ -9,7 +9,10 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('shop', function () {
-    return Inertia::render('Shop');
+    $products = \App\Models\Product::latest()->get();
+    return Inertia::render('Shop', [
+        'products' => $products
+    ]);
 })->name('shop');
 
 Route::get('about', function () {
