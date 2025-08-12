@@ -52,8 +52,6 @@ function handleFileChange(e) {
 }
 
 function updateProduct() {
-  form.post(`/products/${props.product.id}`, {
-    _method: 'put',
-  })
+  form.post(`/products/${props.product.id}`)
 }
 </script>
