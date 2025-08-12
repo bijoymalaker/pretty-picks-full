@@ -17,6 +17,11 @@ class ProductController extends Controller
         ]);
     }
 
+    public function show($id)
+    {
+        return Inertia::render('ProductPage', ['id' => $id]);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([

@@ -50,6 +50,14 @@ Route::get('/product/{id}', function ($id) {
     return Inertia::render('ProductPage', ['id' => $id]);
 })->name('productPage');
 
+Route::get('/api/products/{id}', function ($id) {
+    $product = \App\Models\Product::find($id);
+    if (!$product) {
+        return response()->json(['error' => 'Product not found'], 404);
+    }
+    return response()->json($product);
+});
+
 Route::get('/checkout', function () {
     return Inertia::render('Checkout');
 })->name('checkout');
