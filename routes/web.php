@@ -23,6 +23,11 @@ Route::get('blog', function () {
     return Inertia::render('BlogPage');
 })->name('blog');
 
+use App\Http\Controllers\ProductController;
+
+Route::resource('products', ProductController::class);
+
+
 // Route::get('/login', function () {
 //     return Inertia::render('Login');
 // })->name('login');
