@@ -22,8 +22,15 @@
                 <aside class="col-md-3">
                     <div class="mb-4">
                         <h5>Filter by Price</h5>
-                        <input type="range" class="form-range" min="400" max="2200" step="100" v-model="priceRange" />
-                        <p>Price: {{ priceRange[0] }} - {{ priceRange[1] }}</p>
+                        <div>
+                            <label>Min Price: ${{ priceRange[0] }}</label>
+                            <input type="range" class="form-range" min="0" max="2000" step="50" v-model="priceRange[0]" />
+                        </div>
+                        <div>
+                            <label>Max Price: ${{ priceRange[1] }}</label>
+                            <input type="range" class="form-range" min="0" max="2000" step="50" v-model="priceRange[1]" />
+                        </div>
+                        <p>Price Range: ${{ priceRange[0] }} - ${{ priceRange[1] }}</p>
                     </div>
                     <div class="mb-4">
                         <h5>Stock Status</h5>
@@ -36,23 +43,27 @@
                             <label for="inStock">In Stock</label>
                         </div>
                     </div>
+                    <Link :href="route('products.index')" class="btn btn-primary w-100">Manage Products</Link>
                 </aside>
                 <!-- Main Content -->
                 <main class="col-md-9">
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
                         <div class="col" v-for="product in filteredProducts" :key="product.id">
                             <div class="card h-100">
-                                <img :src="product.images" class="card-img-top" :alt="product.title" />
+                                <img :src="getProductImage(product)" class="card-img-top" :alt="product.title" />
                                 <div class="card-body">
-                                    <button @click="console.log(product)" class="btn btn-secondary btn-sm mb-2">Show in
-                                        Console</button>
                                     <h5 class="card-title">{{ product.title }}</h5>
-                                    <p class="card-text">{{ product.category }}</p>
+                                    <p class="card-text text-capitalize">{{ product.category }}</p>
                                     <p class="text-muted">
-                                        <s v-if="product.discount">&#2547; {{ Math.floor(product.originalPrice * 125) }}</s>
-                                        &#2547; {{ Math.floor(product.price * 125) }}
+                                        <s v-if="product.discountPercentage > 0">
+                                            ${{ Math.floor(product.price / (1 - product.discountPercentage / 100)) }}
+                                        </s>
+                                        ${{ Math.floor(product.price) }}
+                                        <span v-if="product.discountPercentage > 0" class="badge bg-success">
+                                            {{ product.discountPercentage }}% OFF
+                                        </span>
                                     </p>
-                                    <Link :href="route('productPage', { id: product.id })" class="btn btn-primary">Read More</Link>
+                                    <Link :href="route('productPage', { id: product.id })" class="btn btn-primary btn-sm">View Details</Link>
                                 </div>
                             </div>
                         </div>
@@ -63,10 +74,10 @@
     </div>
 </template>
 <script setup>
-import AppLayouts from '../layout/AppLayouts.vue';
+import AppLayout from '@/layout/AppLayouts.vue';
 defineOptions({
   name: 'Shop',
-  layout: AppLayouts,
+  layout: AppLayout,
 })
 import { ref, onMounted, computed } from "vue";
 import { Link } from '@inertiajs/vue3';
@@ -74,14 +85,14 @@ import { route } from 'ziggy-js';
 import InnerPageBanner from "../components/innerpage/InnerPageBanner.vue";
 import innerBanner from '../assets/images/with_photosWeb_Banner_716_4jjhhj.webp';
 
-const priceRange = ref([400, 2200]);
+const priceRange = ref([0, 2000]);
 const products = ref([]);
 const filters = ref({
     onSale: false,
     inStock: false,
 });
 
-// Add "All" as the first category
+// Categories matching dummyjson.com
 const categories = [
     "All",
     "beauty",
@@ -97,6 +108,13 @@ const selectedCategory = ref(categories[0]);
 function selectCategory(category) {
     selectedCategory.value = category;
 }
+
+const getProductImage = (product) => {
+    if (product.images && Array.isArray(product.images) && product.images.length > 0) {
+        return product.images[0];
+    }
+    return 'https://via.placeholder.com/300x200?text=No+Image';
+};
 
 const fetchProducts = async () => {
     try {
@@ -120,10 +138,41 @@ const fetchProducts = async () => {
 onMounted(fetchProducts);
 
 const filteredProducts = computed(() => {
-    if (selectedCategory.value === "All") {
-        return products.value;
+    let filtered = products.value;
+    
+    // Category filter
+    if (selectedCategory.value !== "All") {
+        filtered = filtered.filter(product => 
+            product.category.toLowerCase() === selectedCategory.value.toLowerCase()
+        );
     }
-    return products.value.filter(product => product.category === selectedCategory.value);
+    
+    // Price range filter
+    filtered = filtered.filter(product => 
+        product.price >= priceRange.value[0] && product.price <= priceRange.value[1]
+    );
+    
+    // Stock status filters
+    if (filters.value.onSale) {
+        filtered = filtered.filter(product => product.discountPercentage > 0);
+    }
+    
+    if (filters.value.inStock) {
+        filtered = filtered.filter(product => product.availabilityStatus === 'InStock');
+    }
+    
+    return filtered;
 });
 </script>
+<style scoped>
+.card {
+    transition: transform 0.2s;
+}
+.card:hover {
+    transform: translateY(-5px);
+}
+.badge {
+    font-size: 0.75em;
+}
+</style>
 <style scoped></style>
