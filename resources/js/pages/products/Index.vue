@@ -52,10 +52,7 @@ function handleImageUpload(e) {
           <td>
             <!-- Edit and Delete -->
             <Link :href="`/products/${product.id}/edit`">Edit</Link>
-            <form :action="`/products/${product.id}`" method="post" style="display:inline">
-              <input type="hidden" name="_method" value="DELETE">
-              <button type="submit">Delete</button>
-            </form>
+            <Link :href="`/products/${product.id}`" method="delete" as="button" type="button">Delete</Link>
           </td>
         </tr>
       </tbody>
