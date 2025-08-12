@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Link, useForm } from '@inertiajs/vue3';
+import { Link, useForm, router } from '@inertiajs/vue3';
 
 const props = defineProps({
   products: Array
@@ -19,6 +19,12 @@ function submit() {
 
 function handleImageUpload(e) {
   form.image = e.target.files[0];
+}
+
+function deleteProduct(productId) {
+  if (confirm('Are you sure you want to delete it?')) {
+    router.delete(`/products/${productId}`);
+  }
 }
 </script>
 
@@ -52,7 +58,7 @@ function handleImageUpload(e) {
           <td>
             <!-- Edit and Delete -->
             <Link :href="`/products/${product.id}/edit`">Edit</Link>
-            <Link :href="`/products/${product.id}`" method="delete" as="button" type="button">Delete</Link>
+            <button @click="deleteProduct(product.id)" type="button">Delete</button>
           </td>
         </tr>
       </tbody>

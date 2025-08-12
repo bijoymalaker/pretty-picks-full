@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
     return Inertia::render('Home');
@@ -23,9 +24,11 @@ Route::get('blog', function () {
     return Inertia::render('BlogPage');
 })->name('blog');
 
-use App\Http\Controllers\ProductController;
+
 
 Route::resource('products', ProductController::class);
+Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+
 
 
 // Route::get('/login', function () {

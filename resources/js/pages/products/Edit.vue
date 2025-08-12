@@ -52,6 +52,16 @@ function handleFileChange(e) {
 }
 
 function updateProduct() {
-  form.post(`/products/${props.product.id}`)
+  form.transform((data) => ({
+    ...data,
+    _method: 'PUT' // Laravel method spoofing
+  }))
+  .post(`/products/${props.product.id}`, {
+    forceFormData: true, // sends as multipart/form-data
+    onSuccess: () => {
+      alert('Product updated successfully')
+    }
+  })
 }
 </script>
+
