@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\BlogController;
 
 Route::get('/', function () {
     return Inertia::render('Home');
@@ -24,15 +25,16 @@ Route::get('contact', function () {
 })->name('contact');
 
 Route::get('blog', function () {
-    return Inertia::render('BlogPage');
+    $blogs = \App\Models\Blog::published()->latest()->get();
+    return Inertia::render('BlogPage', [
+        'blogs' => $blogs
+    ]);
 })->name('blog');
 
-
-
 Route::resource('products', ProductController::class);
+Route::resource('blogs', BlogController::class);
 Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
-
-
+Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
 
 // Route::get('/login', function () {
 //     return Inertia::render('Login');
@@ -42,9 +44,7 @@ Route::put('/products/{product}', [ProductController::class, 'update'])->name('p
 //     return Inertia::render('Register');
 // })->name('register');
 
-Route::get('/blog/{id}', function ($id) {
-    return Inertia::render('BlogPost', ['id' => $id]);
-})->name('blogPost');
+Route::get('/blog/{slug}', [\App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
 
 Route::get('/product/{id}', function ($id) {
     return Inertia::render('ProductPage', ['id' => $id]);
