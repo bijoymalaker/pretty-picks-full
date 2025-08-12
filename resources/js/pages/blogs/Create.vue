@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue';
 import { useForm, router } from '@inertiajs/vue3';
 import AppLayouts from '@/layout/AppLayouts.vue';
@@ -20,7 +20,7 @@ const form = useForm({
   featured_image: null
 });
 
-const imagePreview = ref<string | null>(null);
+const imagePreview = ref(null);
 
 function submit() {
   form.post('/blogs', {
@@ -30,15 +30,15 @@ function submit() {
   });
 }
 
-function handleImageUpload(e: Event) {
-  const target = e.target as HTMLInputElement;
+function handleImageUpload(e) {
+  const target = e.target;
   if (target.files && target.files[0]) {
     form.featured_image = target.files[0];
     
     // Create preview
     const reader = new FileReader();
     reader.onload = (e) => {
-      imagePreview.value = e.target?.result as string;
+      imagePreview.value = e.target.result;
     };
     reader.readAsDataURL(target.files[0]);
   }

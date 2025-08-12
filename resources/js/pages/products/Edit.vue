@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { useForm, Link } from '@inertiajs/vue3'
 import { watch } from 'vue'
 import AppLayouts from '../../layout/AppLayouts.vue';
@@ -8,7 +8,10 @@ defineOptions({
 });
 
 const props = defineProps({
-  product: Object
+  product: {
+    type: Object,
+    required: true
+  }
 })
 
 const form = useForm({

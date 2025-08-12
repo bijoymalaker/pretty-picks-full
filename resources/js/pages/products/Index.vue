@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue';
 import { Link, useForm, router } from '@inertiajs/vue3';
 import AppLayouts from '../../layout/AppLayouts.vue';
@@ -8,7 +8,10 @@ defineOptions({
 });
 
 const props = defineProps({
-  products: Array
+  products: {
+    type: Array,
+    required: true
+  }
 });
 
 const form = useForm({

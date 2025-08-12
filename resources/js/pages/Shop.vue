@@ -67,7 +67,7 @@
         </div>
     </div>
 </template>
-<script setup lang="ts">
+<script setup>
 import AppLayout from '@/layout/AppLayouts.vue';
 defineOptions({
   name: 'Shop',
@@ -79,19 +79,13 @@ import { route } from 'ziggy-js';
 import InnerPageBanner from "../components/innerpage/InnerPageBanner.vue";
 import innerBanner from '../assets/images/with_photosWeb_Banner_716_4jjhhj.webp';
 
-interface Product {
-    id: number;
-    name: string;
-    price: string | number;
-    description?: string;
-    collection?: string;
-    image?: string;
-}
-
 // Props from backend
-const props = defineProps<{
-    products: Product[]
-}>();
+const props = defineProps({
+  products: {
+    type: Array,
+    required: true
+  }
+});
 
 const priceRange = ref([0, 2000]);
 const filters = ref({
@@ -101,18 +95,18 @@ const filters = ref({
 
 // Categories based on collections from backend
 const categories = computed(() => {
-    const allCollections = props.products.map((product: Product) => product.collection || 'Uncategorized');
+    const allCollections = props.products.map((product) => product.collection || 'Uncategorized');
     const uniqueCollections = [...new Set(allCollections)];
     return ['All', ...uniqueCollections.filter(Boolean)];
 });
 
 const selectedCategory = ref('All');
 
-function selectCategory(category: string) {
+function selectCategory(category) {
     selectedCategory.value = category;
 }
 
-const getProductImage = (product: Product): string => {
+const getProductImage = (product) => {
     if (product.image) {
         return `/storage/${product.image}`;
     }
@@ -124,13 +118,13 @@ const filteredProducts = computed(() => {
     
     // Category filter (using collection as category)
     if (selectedCategory.value !== "All") {
-        filtered = filtered.filter((product: Product) => 
+        filtered = filtered.filter((product) => 
             (product.collection || 'Uncategorized').toLowerCase() === selectedCategory.value.toLowerCase()
         );
     }
     
     // Price range filter
-    filtered = filtered.filter((product: Product) => {
+    filtered = filtered.filter((product) => {
         const price = typeof product.price === 'string' ? parseFloat(product.price) : product.price;
         return price >= priceRange.value[0] && price <= priceRange.value[1];
     });
