@@ -77,12 +77,14 @@
 </template>
 <script setup>
 import AppLayout from '@/layout/AppLayouts.vue';
-import { ref, computed, inject } from "vue";
+import { ref, computed } from "vue";
 import { Link } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
 import InnerPageBanner from "../components/innerpage/InnerPageBanner.vue";
 import innerBanner from '../assets/images/with_photosWeb_Banner_716_4jjhhj.webp';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { useCartStore } from '@/stores/cart';
+import { useWishlistStore } from '@/stores/wishlist';
 
 defineOptions({
   name: 'Shop',
@@ -97,9 +99,17 @@ const props = defineProps({
   }
 });
 
-// Inject cart and wishlist functions
-const addToCart = inject('addToCart')
-const addToWishlist = inject('addToWishlist')
+// Use cart and wishlist stores
+const cartStore = useCartStore();
+const wishlistStore = useWishlistStore();
+
+const addToCart = (product) => {
+    cartStore.addToCart(product);
+};
+
+const addToWishlist = (product) => {
+    wishlistStore.addToWishlist(product);
+};
 
 const priceRange = ref([0, 2000]);
 const filters = ref({

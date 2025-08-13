@@ -7,7 +7,7 @@ import './style.css'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faCartArrowDown, faArrowTurnUp, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons'
+import { faCartArrowDown, faArrowTurnUp, faLocationDot, faPhone, faCartPlus } from '@fortawesome/free-solid-svg-icons'
 import { faFacebookF, faTwitter, faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faCalendar, faComments, faHeart, faUser } from '@fortawesome/free-regular-svg-icons'
 import { faShare } from '@fortawesome/free-solid-svg-icons/faShare';
@@ -34,7 +34,7 @@ nprogressCustomStyle.innerHTML = `
 document.head.appendChild(nprogressCustomStyle)
 
 /* add icons to the library */
-library.add(faHeart, faCartArrowDown, faFacebookF, faArrowTurnUp, faLocationDot, faPhone, faWhatsapp, faUser, faCalendar, faComments, faShare, faTwitter, faShare, faPrint)
+library.add(faHeart, faCartArrowDown, faFacebookF, faArrowTurnUp, faLocationDot, faPhone, faWhatsapp, faUser, faCalendar, faComments, faShare, faTwitter, faShare, faPrint, faCartPlus)
 
 // Inertia progress bar
 NProgress.configure({ showSpinner: false })
