@@ -44,7 +44,7 @@ Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.upda
 //     return Inertia::render('Register');
 // })->name('register');
 
-Route::get('/blog/{slug}', [\App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 Route::get('/product/{id}', function ($id) {
     return Inertia::render('ProductPage', ['id' => $id]);

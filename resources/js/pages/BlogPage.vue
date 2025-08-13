@@ -5,6 +5,9 @@
             <div class="row">
                 <div class="col-12 mb-4">
                     <h1 class="text-center mb-5">Our Blog</h1>
+                    <Link :href="route('blogs.index')" class="btn btn-primary text-center">
+                        <i class="bi bi-plus"></i> Manage Blog
+                    </Link>
                 </div>
             </div>
             <div class="row">
@@ -42,8 +45,9 @@
 <script setup>
 import InnerPageBanner from '../components/innerpage/InnerPageBanner.vue';
 import innerBanner from '../assets/images/BlackWeddingJewelryLandscap.png';
-import AppLayouts from '../layout/AppLayouts.vue';
+import AppLayouts from '@/layout/AppLayouts.vue';
 import { Link } from '@inertiajs/vue3';
+import { route } from 'ziggy-js';
 
 defineOptions({
     layout: AppLayouts,
