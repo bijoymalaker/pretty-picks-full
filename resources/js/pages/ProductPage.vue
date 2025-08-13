@@ -146,16 +146,27 @@ const formatPrice = (price: string | number): string => {
     return numPrice.toFixed(2);
 };
 
+import { inject } from 'vue';
+
+const addToCartStore = inject('addToCart');
+const addToWishlistStore = inject('addToWishlist');
+
 const addToCart = () => {
-    // Implement cart functionality
-    console.log('Adding to cart:', product.value);
-    alert('Product added to cart!');
+    if (product.value && addToCartStore) {
+        addToCartStore(product.value);
+        alert('Product added to cart!');
+    } else {
+        console.error('Add to cart function or product is not available');
+    }
 };
 
 const addToWishlist = () => {
-    // Implement wishlist functionality
-    console.log('Adding to wishlist:', product.value);
-    alert('Product added to wishlist!');
+    if (product.value && addToWishlistStore) {
+        addToWishlistStore(product.value);
+        alert('Product added to wishlist!');
+    } else {
+        console.error('Add to wishlist function or product is not available');
+    }
 };
 </script>
 

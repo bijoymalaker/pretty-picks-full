@@ -57,7 +57,15 @@
                                     <p class="text-muted">
                                         ${{ Math.floor(Number(product.price)) }}
                                     </p>
-                                    <Link :href="route('productPage', { id: product.id })" class="btn btn-primary btn-sm">View Details</Link>
+                                    <div class="d-flex gap-2">
+                                        <Link :href="route('productPage', { id: product.id })" class="btn btn-primary btn-sm flex-fill">View Details</Link>
+                                        <button class="btn btn-outline-primary btn-sm" @click="addToCart(product)">
+                                            <FontAwesomeIcon icon="fa-solid fa-cart-plus" />
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm" @click="addToWishlist(product)">
+                                            <FontAwesomeIcon icon="fa-regular fa-heart" />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -69,15 +77,17 @@
 </template>
 <script setup>
 import AppLayout from '@/layout/AppLayouts.vue';
-defineOptions({
-  name: 'Shop',
-  layout: AppLayout,
-})
-import { ref, computed } from "vue";
+import { ref, computed, inject } from "vue";
 import { Link } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
 import InnerPageBanner from "../components/innerpage/InnerPageBanner.vue";
 import innerBanner from '../assets/images/with_photosWeb_Banner_716_4jjhhj.webp';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+defineOptions({
+  name: 'Shop',
+  layout: AppLayout,
+})
 
 // Props from backend
 const props = defineProps({
@@ -86,6 +96,10 @@ const props = defineProps({
     required: true
   }
 });
+
+// Inject cart and wishlist functions
+const addToCart = inject('addToCart')
+const addToWishlist = inject('addToWishlist')
 
 const priceRange = ref([0, 2000]);
 const filters = ref({

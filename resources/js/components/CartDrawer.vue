@@ -23,8 +23,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="js">
 import { inject, ref, watch } from 'vue'
+import { route } from 'ziggy-js'
 const cart = inject('cart')
 const isOpen = inject('cartDrawerOpen')
 const setDrawerOpen = inject('setCartDrawerOpen')
@@ -45,7 +46,8 @@ watch(isOpen, (val) => {
 })
 
 function checkout() {
-  alert('Proceed to checkout!')
+  closeDrawer()
+  window.location.href = route('checkout')
 }
 </script>
 

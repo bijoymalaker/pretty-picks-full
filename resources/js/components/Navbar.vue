@@ -29,7 +29,7 @@
                                 <FontAwesomeIcon icon="fa-regular fa-heart" class="fs-4" />
                                 <span
                                     class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-danger">
-                                    {{ wishlist.length }}
+                                    {{ wishlistStore.wishlistItemsCount }}
                                     <span class="visually-hidden">wishlist items</span>
                                 </span>
                             </a>
@@ -43,7 +43,7 @@
                                 <FontAwesomeIcon icon="fa-solid fa-cart-arrow-down" class="fs-4" />
                                 <span
                                     class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-danger">
-                                    {{ cart.length }}
+                                    {{ cartStore.cartItemsCount }}
                                     <span class="visually-hidden">cart items</span>
                                 </span>
                             </a>
@@ -58,12 +58,14 @@
 </template>
 
 <script setup>
-import { ref, provide } from 'vue'
+import { provide, ref } from 'vue'
 import { Link, usePage } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
 import CartDrawer from './CartDrawer.vue'
 import WishlistDrawer from './WishlistDrawer.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { useCartStore } from '../stores/cart'
+import { useWishlistStore } from '../stores/wishlist'
 
 const page = usePage()
 function isActive(routeName) {
@@ -71,51 +73,36 @@ function isActive(routeName) {
   return page.props.value?.ziggy?.route?.name === routeName;
 }
 
-const cart = ref([
-    // Example product
-    // { name: 'Product 1', qty: 1, price: 20, image: 'https://via.placeholder.com/50' }
-])
+// Initialize stores
+const cartStore = useCartStore()
+const wishlistStore = useWishlistStore()
+
 const cartDrawerOpen = ref(false)
+const wishlistDrawerOpen = ref(false)
+
+// Provide cart state and functions
+provide('cart', cartStore.cart)
+provide('cartDrawerOpen', cartDrawerOpen)
+provide('setCartDrawerOpen', (val) => { cartDrawerOpen.value = val })
+provide('addToCart', cartStore.addToCart)
+provide('removeFromCart', cartStore.removeFromCart)
+provide('updateQuantity', cartStore.updateQuantity)
+
+// Provide wishlist state and functions
+provide('wishlist', wishlistStore.wishlist)
+provide('wishlistDrawerOpen', wishlistDrawerOpen)
+provide('setWishlistDrawerOpen', (val) => { wishlistDrawerOpen.value = val })
+provide('addToWishlist', wishlistStore.addToWishlist)
+provide('removeFromWishlist', wishlistStore.removeFromWishlist)
+provide('isInWishlist', wishlistStore.isInWishlist)
 
 function openCartDrawer() {
     cartDrawerOpen.value = true
 }
 
-// Provide cart state and drawer control to children
-provide('cart', cart)
-provide('cartDrawerOpen', cartDrawerOpen)
-provide('setCartDrawerOpen', (val) => { cartDrawerOpen.value = val })
-
-// Example: Add this function to add products to cart from anywhere
-function addToCart(product) {
-    const found = cart.value.find(item => item.name === product.name)
-    if (found) {
-        found.qty += 1
-    } else {
-        cart.value.push({ ...product, qty: 1 })
-    }
-}
-provide('addToCart', addToCart)
-
-const wishlist = ref([
-    // Example: { name: 'Wishlist Product', price: 99, image: 'https://via.placeholder.com/50' }
-])
-const wishlistDrawerOpen = ref(false)
-
 function openWishlistDrawer() {
     wishlistDrawerOpen.value = true
 }
-
-provide('wishlist', wishlist)
-provide('wishlistDrawerOpen', wishlistDrawerOpen)
-provide('setWishlistDrawerOpen', (val) => { wishlistDrawerOpen.value = val })
-
-function addToWishlist(product) {
-    if (!wishlist.value.find(item => item.name === product.name)) {
-        wishlist.value.push(product)
-    }
-}
-provide('addToWishlist', addToWishlist)
 
 const navItems = [
     { name: 'home', route: 'home', label: 'Home' },

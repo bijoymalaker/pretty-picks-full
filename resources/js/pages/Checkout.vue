@@ -82,20 +82,24 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Product</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Price</th>
                                     <th scope="col">Subtotal</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(item, index) in cartItems" :key="index">
+                                <tr v-for="(item, index) in cartStore.cart" :key="index">
                                     <td>{{ item.name }}</td>
+                                    <td>{{ item.qty }}</td>
                                     <td>৳ {{ item.price }}</td>
+                                    <td>৳ {{ item.price * item.qty }}</td>
                                 </tr>
                             </tbody>
                         </table>
                         <hr>
                         <div class="row">
                             <div class="col-6">Subtotal</div>
-                            <div class="col-6">৳ {{ subTotal }}</div>
+                            <div class="col-6">৳ {{ cartStore.cartTotal }}</div>
                         </div>
                         <div class="row">
                             <div class="col-6">Shipping</div>
@@ -104,7 +108,7 @@
                         <hr>
                         <div class="row">
                             <div class="col-6">Total</div>
-                            <div class="col-6">৳ {{ total }}</div>
+                            <div class="col-6">৳ {{ cartStore.cartTotal + 70 }}</div>
                         </div>
                         <hr>
                         <h5 class="card-title">Payment</h5>
@@ -136,53 +140,49 @@
         </div>
     </div>
 </template>
-<script>
-import AppLayouts from '../layout/AppLayouts.vue';
-export default {
+<script setup>
+import AppLayouts from '@/layout/AppLayouts.vue';
+import { useCartStore } from '../stores/cart';
+import { ref } from 'vue';
+
+defineOptions({
   name: 'Checkout',
   layout: AppLayouts,
-  data() {
-      return {
-          cartItems: [
-              { name: 'AR VITAMIN C B3 GLUTAX10 SERUM (10ML)', price: 500 },
-              { name: 'TVLV YEAST COLLAGEN CREAM (50G)', price: 700 },
-          ],
-          billing: {
-              country: '',
-              name: '',
-              phone: '',
-              address: '',
-              district: '',
-              thana: '',
-              email: '',
-          },
-          shipping: {
-              address: '',
-          },
-          shipToDifferentAddress: false,
-          orderNotes: '',
-          paymentMethod: 'cashOnDelivery',
-      };
-  },
-  computed: {
-      subTotal() {
-          return this.cartItems.reduce((total, item) => total + item.price, 0);
-      },
-      total() {
-          return this.subTotal + 70; // Add shipping cost
-      },
-  },
-  methods: {
-      placeOrder() {
-          // Validate form and place order logic here
-          console.log('Billing Details:', this.billing);
-          console.log('Shipping Address:', this.shipToDifferentAddress ? this.shipping.address : this.billing.address);
-          console.log('Order Notes:', this.orderNotes);
-          console.log('Payment Method:', this.paymentMethod);
-          // ... send order data to server ...
-      },
-  },
-};
+})
+
+const cartStore = useCartStore()
+
+const billing = ref({
+  country: '',
+  name: '',
+  phone: '',
+  address: '',
+  district: '',
+  thana: '',
+  email: '',
+})
+
+const shipping = ref({
+  address: '',
+})
+
+const shipToDifferentAddress = ref(false)
+const orderNotes = ref('')
+const paymentMethod = ref('cashOnDelivery')
+
+const placeOrder = () => {
+  // Validate form and place order logic here
+  console.log('Billing Details:', billing.value)
+  console.log('Shipping Address:', shipToDifferentAddress.value ? shipping.value.address : billing.value.address)
+  console.log('Order Notes:', orderNotes.value)
+  console.log('Payment Method:', paymentMethod.value)
+  console.log('Cart Items:', cartStore.cart.value)
+  console.log('Total:', cartStore.cartTotal.value + 70)
+  
+  // Here you would typically send the order to your backend
+  // After successful order placement, clear the cart
+  // cartStore.clearCart()
+}
 </script>
 
 <style scoped>
