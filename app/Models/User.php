@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'is_admin',
     ];
 
     /**
@@ -43,6 +45,31 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
         ];
+    }
+
+    /**
+     * Check if user is an admin
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin' || $this->is_admin;
+    }
+
+    /**
+     * Scope a query to only include admin users.
+     */
+    public function scopeAdmins($query)
+    {
+        return $query->where('role', 'admin')->orWhere('is_admin', true);
+    }
+
+    /**
+     * Scope a query to only include regular users.
+     */
+    public function scopeUsers($query)
+    {
+        return $query->where('role', 'user')->where('is_admin', false);
     }
 }

@@ -40,12 +40,43 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'user',
+            'is_admin' => false,
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return to_route('dashboard');
+        return to_route('home');
+    }
+
+    /**
+     * Handle an incoming admin registration request.
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function storeAdmin(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'admin_key' => 'required|string|in:ADMIN_SECRET_123', // Simple admin key validation
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'admin',
+            'is_admin' => true,
+        ]);
+
+        event(new Registered($user));
+
+        Auth::login($user);
+
+        return to_route('admin.dashboard');
     }
 }

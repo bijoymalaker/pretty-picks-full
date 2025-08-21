@@ -81,5 +81,60 @@ Route::fallback(function () {
     return redirect('/');
 });
 
+// Admin routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    // Admin auth routes
+    Route::middleware('guest')->group(function () {
+        Route::get('login', function () {
+            return Inertia::render('auth/AdminLogin');
+        })->name('login');
+        
+        Route::get('register', function () {
+            return Inertia::render('auth/AdminRegister');
+        })->name('register');
+        
+        Route::post('register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'storeAdmin'])
+            ->name('register.store');
+    });
+
+    // Admin protected routes
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::get('dashboard', function () {
+            $stats = [
+                'totalUsers' => \App\Models\User::count(),
+                'totalProducts' => \App\Models\Product::count(),
+                'totalBlogs' => \App\Models\Blog::count(),
+                'adminUsers' => \App\Models\User::where('role', 'admin')->orWhere('is_admin', true)->count(),
+            ];
+            
+            return Inertia::render('admin/Dashboard', [
+                'stats' => $stats
+            ]);
+        })->name('dashboard');
+        
+        // Add more admin routes here
+        Route::get('users', function () {
+            $users = \App\Models\User::all();
+            return Inertia::render('admin/Users', [
+                'users' => $users
+            ]);
+        })->name('users');
+        
+        Route::get('products', function () {
+            $products = \App\Models\Product::all();
+            return Inertia::render('admin/Products', [
+                'products' => $products
+            ]);
+        })->name('products');
+        
+        Route::get('blogs', function () {
+            $blogs = \App\Models\Blog::all();
+            return Inertia::render('admin/Blogs', [
+                'blogs' => $blogs
+            ]);
+        })->name('blogs');
+    });
+});
+
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

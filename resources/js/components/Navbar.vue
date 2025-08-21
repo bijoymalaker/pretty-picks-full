@@ -35,6 +35,10 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <Link class="nav-link" :href="route('admin.login')" :class="{ active: isActive('admin.login') }">
+                            Admin Login</Link>
+                        </li>
+                        <li class="nav-item">
                             <Link class="nav-link" :href="route('login')" :class="{ active: isActive('login') }">
                             Login/Register</Link>
                         </li>
