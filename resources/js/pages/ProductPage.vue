@@ -96,7 +96,8 @@ defineOptions({
 import { ref, onMounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
-
+import { useCartStore } from '@/stores/cart';
+import { useWishlistStore } from '@/stores/wishlist';
 
 interface Product {
     id: number;
@@ -113,6 +114,10 @@ const props = defineProps<{
 
 const product = ref<Product | null>(null);
 const loading = ref(true);
+
+// Initialize stores
+const cartStore = useCartStore();
+const wishlistStore = useWishlistStore();
 
 onMounted(async () => {
     await fetchProduct();
@@ -146,27 +151,25 @@ const formatPrice = (price: string | number): string => {
     return numPrice.toFixed(2);
 };
 
-import { inject } from 'vue';
-
-const addToCartStore = inject('addToCart');
-const addToWishlistStore = inject('addToWishlist');
-
 const addToCart = () => {
-    if (product.value && addToCartStore) {
-        addToCartStore(product.value);
-        alert('Product added to cart!');
-    } else {
-        console.error('Add to cart function or product is not available');
+    if (product.value) {
+        cartStore.addToCart(product.value);
+        // Show success message or notification
+        showNotification('Product added to cart!', 'success');
     }
 };
 
 const addToWishlist = () => {
-    if (product.value && addToWishlistStore) {
-        addToWishlistStore(product.value);
-        alert('Product added to wishlist!');
-    } else {
-        console.error('Add to wishlist function or product is not available');
+    if (product.value) {
+        wishlistStore.addToWishlist(product.value);
+        // Show success message or notification
+        showNotification('Product added to wishlist!', 'success');
     }
+};
+
+const showNotification = (message: string) => {
+    // Simple notification - you can replace this with a proper toast notification
+    alert(message);
 };
 </script>
 
