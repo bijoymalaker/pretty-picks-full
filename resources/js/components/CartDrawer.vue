@@ -83,6 +83,7 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
 import { route } from 'ziggy-js'
+import { router } from '@inertiajs/vue3'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useCartStore } from '../stores/cart'
 
@@ -142,7 +143,15 @@ function removeItem(productId) {
 
 function checkout() {
   closeDrawer()
-  window.location.href = route('checkout')
+  
+  // Use Inertia to navigate to checkout with cart data
+  router.visit(route('checkout'), {
+    method: 'get',
+    data: {
+      cart: cart.value,
+      total: cartTotal.value
+    }
+  })
 }
 
 // Reset isClosing when drawer is opened

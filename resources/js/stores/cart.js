@@ -1,8 +1,19 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 export const useCartStore = defineStore('cart', () => {
-    const cart = ref([])
+    // Load cart from localStorage if available
+    const loadCartFromStorage = () => {
+        try {
+            const savedCart = localStorage.getItem('cart')
+            return savedCart ? JSON.parse(savedCart) : []
+        } catch (error) {
+            console.error('Error loading cart from localStorage:', error)
+            return []
+        }
+    }
+
+    const cart = ref(loadCartFromStorage())
     
     const cartTotal = computed(() => {
         return cart.value.reduce((total, item) => total + (item.price * item.qty), 0)
@@ -11,6 +22,15 @@ export const useCartStore = defineStore('cart', () => {
     const cartItemsCount = computed(() => {
         return cart.value.reduce((count, item) => count + item.qty, 0)
     })
+    
+    // Save cart to localStorage whenever it changes
+    watch(cart, (newCart) => {
+        try {
+            localStorage.setItem('cart', JSON.stringify(newCart))
+        } catch (error) {
+            console.error('Error saving cart to localStorage:', error)
+        }
+    }, { deep: true })
     
     function addToCart(product, quantity = 1) {
         const existingItem = cart.value.find(item => item.id === product.id)
