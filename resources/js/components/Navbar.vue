@@ -52,13 +52,13 @@
                 </div>
             </div>
         </nav>
-        <CartDrawer />
-        <WishlistDrawer />
+        <CartDrawer ref="cartDrawerRef" />
+        <WishlistDrawer ref="wishlistDrawerRef" />
     </div>
 </template>
 
-<script setup>
-import { provide, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 import { Link, usePage } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
 import CartDrawer from './CartDrawer.vue'
@@ -77,31 +77,16 @@ function isActive(routeName) {
 const cartStore = useCartStore()
 const wishlistStore = useWishlistStore()
 
-const cartDrawerOpen = ref(false)
-const wishlistDrawerOpen = ref(false)
-
-// Provide cart state and functions
-provide('cart', cartStore.cart)
-provide('cartDrawerOpen', cartDrawerOpen)
-provide('setCartDrawerOpen', (val) => { cartDrawerOpen.value = val })
-provide('addToCart', cartStore.addToCart)
-provide('removeFromCart', cartStore.removeFromCart)
-provide('updateQuantity', cartStore.updateQuantity)
-
-// Provide wishlist state and functions
-provide('wishlist', wishlistStore.wishlist)
-provide('wishlistDrawerOpen', wishlistDrawerOpen)
-provide('setWishlistDrawerOpen', (val) => { wishlistDrawerOpen.value = val })
-provide('addToWishlist', wishlistStore.addToWishlist)
-provide('removeFromWishlist', wishlistStore.removeFromWishlist)
-provide('isInWishlist', wishlistStore.isInWishlist)
+// Drawer refs
+const cartDrawerRef = ref(null)
+const wishlistDrawerRef = ref(null)
 
 function openCartDrawer() {
-    cartDrawerOpen.value = true
+    cartDrawerRef.value?.openDrawer()
 }
 
 function openWishlistDrawer() {
-    wishlistDrawerOpen.value = true
+    wishlistDrawerRef.value?.openDrawer()
 }
 
 const navItems = [
@@ -112,6 +97,7 @@ const navItems = [
     { name: 'contact', route: 'contact', label: 'Contact' },
 ]
 </script>
+
 <style scoped>
 .brand-logo {
     height: 35px;

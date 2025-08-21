@@ -81,31 +81,28 @@
 </template>
 
 <script setup>
-import { inject, ref, watch, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { route } from 'ziggy-js'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { useCartStore } from '../stores/cart'
 
-const cart = inject('cart')
-const isOpen = inject('cartDrawerOpen')
-const setDrawerOpen = inject('setCartDrawerOpen')
-const removeFromCart = inject('removeFromCart')
-const updateQuantity = inject('updateQuantity')
-
+const cartStore = useCartStore()
+const isOpen = ref(false)
 const isClosing = ref(false)
 
 // Computed properties
-const cartItemsCount = computed(() => {
-  return cart.value.reduce((count, item) => count + item.qty, 0)
-})
+const cart = computed(() => cartStore.cart)
+const cartItemsCount = computed(() => cartStore.cartItemsCount)
+const cartTotal = computed(() => cartStore.cartTotal)
 
-const cartTotal = computed(() => {
-  return cart.value.reduce((total, item) => total + (item.price * item.qty), 0)
-})
+function openDrawer() {
+  isOpen.value = true
+}
 
 function closeDrawer() {
   isClosing.value = true
   setTimeout(() => {
-    setDrawerOpen(false)
+    isOpen.value = false
     isClosing.value = false
   }, 300)
 }
@@ -128,19 +125,19 @@ function formatPrice(price) {
 function increaseQuantity(productId) {
   const item = cart.value.find(item => item.id === productId)
   if (item) {
-    updateQuantity(productId, item.qty + 1)
+    cartStore.updateQuantity(productId, item.qty + 1)
   }
 }
 
 function decreaseQuantity(productId) {
   const item = cart.value.find(item => item.id === productId)
   if (item && item.qty > 1) {
-    updateQuantity(productId, item.qty - 1)
+    cartStore.updateQuantity(productId, item.qty - 1)
   }
 }
 
 function removeItem(productId) {
-  removeFromCart(productId)
+  cartStore.removeFromCart(productId)
 }
 
 function checkout() {
@@ -151,6 +148,13 @@ function checkout() {
 // Reset isClosing when drawer is opened
 watch(isOpen, (val) => {
   if (val) isClosing.value = false
+})
+
+// Expose methods for parent components
+defineExpose({
+  openDrawer,
+  closeDrawer,
+  isOpen
 })
 </script>
 
@@ -250,8 +254,7 @@ watch(isOpen, (val) => {
 .cart-item-controls {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 0.5rem;
+  gap: 8px;
 }
 
 .quantity {

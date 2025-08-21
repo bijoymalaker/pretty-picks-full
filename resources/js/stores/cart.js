@@ -1,6 +1,7 @@
+import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-export function useCartStore() {
+export const useCartStore = defineStore('cart', () => {
     const cart = ref([])
     
     const cartTotal = computed(() => {
@@ -53,4 +54,4 @@ export function useCartStore() {
         updateQuantity,
         clearCart
     }
-}
+})
