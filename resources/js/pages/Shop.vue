@@ -81,7 +81,7 @@ import { ref, computed } from "vue";
 import { Link } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
 import InnerPageBanner from "../components/innerpage/InnerPageBanner.vue";
-import innerBanner from '../assets/images/with_photosWeb_Banner_716_4jjhhj.webp';
+import innerBanner from '../assets/images/shop-banner.jpg';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useCartStore } from '@/stores/cart';
 import { useWishlistStore } from '@/stores/wishlist';
