@@ -34,13 +34,22 @@
                                 </span>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" v-if="!user">
                             <Link class="nav-link" :href="route('admin.login')" :class="{ active: isActive('admin.login') }">
                             Admin Login</Link>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" v-if="!user">
                             <Link class="nav-link" :href="route('login')" :class="{ active: isActive('login') }">
                             Login/Register</Link>
+                        </li>
+                        <li class="nav-item dropdown" v-else>
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ user.name }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><Link class="dropdown-item" :href="route('profile.edit')">Profile</Link></li>
+                                <li><Link class="dropdown-item" :href="route('logout')" method="post" as="button">Logout</Link></li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link position-relative" href="#" @click.prevent="openCartDrawer">
@@ -61,7 +70,7 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 import { Link, usePage } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
@@ -71,10 +80,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useCartStore } from '../stores/cart'
 import { useWishlistStore } from '../stores/wishlist'
 
-const page = usePage()
-function isActive(routeName) {
-  // Compare the current route name from Ziggy with the nav item route name
-  return page.props.value?.ziggy?.route?.name === routeName;
+const page = usePage<{ auth: { user: any } }>() // Define the type for page props
+const user = page.props.value ? page.props.value.auth.user : null
+
+function isActive(routeName: string): boolean {
+  return route().current(routeName);
 }
 
 // Initialize stores
@@ -82,14 +92,22 @@ const cartStore = useCartStore()
 const wishlistStore = useWishlistStore()
 
 // Drawer refs
-const cartDrawerRef = ref(null)
-const wishlistDrawerRef = ref(null)
+const cartDrawerRef = ref<{ openDrawer: () => void } | null>(null)
+const wishlistDrawerRef = ref<{ openDrawer: () => void } | null>(null)
 
 function openCartDrawer() {
+    if (!user) {
+        alert('Please login to access the cart.')
+        return
+    }
     cartDrawerRef.value?.openDrawer()
 }
 
 function openWishlistDrawer() {
+    if (!user) {
+        alert('Please login to access the wishlist.')
+        return
+    }
     wishlistDrawerRef.value?.openDrawer()
 }
 
