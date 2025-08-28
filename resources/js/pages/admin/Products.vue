@@ -111,6 +111,7 @@
 <script setup lang="ts">
 import { Link, useForm } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
+import axios from 'axios'
 
 defineProps<{
   products: Array<{
@@ -128,10 +129,16 @@ function logout() {
   form.post(route('logout'))
 }
 
-function deleteProduct(product: any) {
+async function deleteProduct(product: any) {
   if (confirm('Are you sure you want to delete product: ' + product.name + '?')) {
-    // Implement delete functionality
-    alert('Product deleted: ' + product.name)
+    try {
+        await axios.delete(`/api/products/${product.id}`); // Use correct API endpoint
+        alert('Product deleted: ' + product.name);
+        // Refresh the product list by reloading the page or emitting an event
+        window.location.reload();
+    } catch {
+        alert('Failed to delete product: ' + product.name);
+    }
   }
 }
 </script>

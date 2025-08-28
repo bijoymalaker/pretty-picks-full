@@ -85,7 +85,7 @@ Route::fallback(function () {
 Route::prefix('admin')->name('admin.')->group(function () {
     // Admin auth routes
     Route::middleware('guest')->group(function () {
-        Route::get('login', function () {
+        Route::get('/login', function () {
             return Inertia::render('auth/AdminLogin');
         })->name('login');
         
@@ -112,7 +112,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ]);
         })->name('dashboard');
         
-        // Add more admin routes here
+        // Add resource routes for managing products and blogs
+        Route::resource('products', ProductController::class);
+        Route::resource('blogs', BlogController::class);
         Route::get('users', function () {
             $users = \App\Models\User::all();
             return Inertia::render('admin/Users', [

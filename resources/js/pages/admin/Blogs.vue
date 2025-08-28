@@ -108,6 +108,7 @@
 <script setup lang="ts">
 import { Link, useForm } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
+import axios from 'axios'
 
 defineProps<{
   blogs: Array<{
@@ -125,10 +126,16 @@ function logout() {
   form.post(route('logout'))
 }
 
-function deleteBlog(blog: any) {
+async function deleteBlog(blog: any) {
   if (confirm('Are you sure you want to delete blog: ' + blog.title + '?')) {
-    // Implement delete functionality
-    alert('Blog deleted: ' + blog.title)
+    try {
+      await axios.delete(`/api/blogs/${blog.id}`); // Use correct API endpoint
+      alert('Blog deleted: ' + blog.title);
+      // Refresh the blog list by reloading the page or emitting an event
+      window.location.reload();
+    } catch {
+      alert('Failed to delete blog: ' + blog.title);
+    }
   }
 }
 </script>
