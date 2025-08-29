@@ -108,19 +108,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { Link, useForm } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
 
-defineProps<{
-  products: Array<{
-    id: number
-    name: string
-    price: number
-    collection: string
-    created_at: string
-  }>
-}>()
+defineProps({
+  products: Array
+})
 
 const form = useForm({})
 
@@ -128,7 +122,7 @@ function logout() {
   form.post(route('logout'))
 }
 
-function deleteProduct(product: any) {
+function deleteProduct(product) {
   if (confirm('Are you sure you want to delete product: ' + product.name + '?')) {
     form.delete(route('products.destroy', product.id), {
       onSuccess: () => {

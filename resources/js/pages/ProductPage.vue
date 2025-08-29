@@ -86,11 +86,11 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import AppLayout from '@/layout/AppLayouts.vue';
 defineOptions({
-  name: 'ProductPage',
-  layout: AppLayout,
+    name: 'ProductPage',
+    layout: AppLayout,
 })
 
 import { ref, onMounted } from 'vue';
@@ -99,20 +99,11 @@ import { route } from 'ziggy-js';
 import { useCartStore } from '@/stores/cart';
 import { useWishlistStore } from '@/stores/wishlist';
 
-interface Product {
-    id: number;
-    name: string;
-    price: string | number;
-    description?: string;
-    collection?: string;
-    image?: string;
-}
+const props = defineProps({
+        id: [String, Number]
+});
 
-const props = defineProps<{
-    id: string | number
-}>();
-
-const product = ref<Product | null>(null);
+const product = ref(null);
 const loading = ref(true);
 
 // Initialize stores
@@ -120,56 +111,53 @@ const cartStore = useCartStore();
 const wishlistStore = useWishlistStore();
 
 onMounted(async () => {
-    await fetchProduct();
+        await fetchProduct();
 });
 
 const fetchProduct = async () => {
-    try {
-        const response = await fetch(`/api/products/${props.id}`);
-        if (response.ok) {
-            product.value = await response.json();
-        } else {
-            product.value = null;
+        try {
+                const response = await fetch(`/api/products/${props.id}`);
+                if (response.ok) {
+                        product.value = await response.json();
+                } else {
+                        product.value = null;
+                }
+        } catch (error) {
+                console.error('Error fetching product:', error);
+                product.value = null;
+        } finally {
+                loading.value = false;
         }
-    } catch (error) {
-        console.error('Error fetching product:', error);
-        product.value = null;
-    } finally {
-        loading.value = false;
-    }
 };
 
-const getProductImage = (product: Product): string => {
-    if (product.image) {
-        return `/storage/${product.image}`;
-    }
-    return 'https://via.placeholder.com/600x600?text=No+Image';
+const getProductImage = (product) => {
+        if (product.image) {
+                return `/storage/${product.image}`;
+        }
+        return 'https://via.placeholder.com/600x600?text=No+Image';
 };
 
-const formatPrice = (price: string | number): string => {
-    const numPrice = typeof price === 'string' ? parseFloat(price) : price;
-    return numPrice.toFixed(2);
+const formatPrice = (price) => {
+        const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+        return numPrice.toFixed(2);
 };
 
 const addToCart = () => {
-    if (product.value) {
-        cartStore.addToCart(product.value);
-        // Show success message or notification
-        showNotification('Product added to cart!', 'success');
-    }
+        if (product.value) {
+                cartStore.addToCart(product.value);
+                showNotification('Product added to cart!', 'success');
+        }
 };
 
 const addToWishlist = () => {
-    if (product.value) {
-        wishlistStore.addToWishlist(product.value);
-        // Show success message or notification
-        showNotification('Product added to wishlist!', 'success');
-    }
+        if (product.value) {
+                wishlistStore.addToWishlist(product.value);
+                showNotification('Product added to wishlist!', 'success');
+        }
 };
 
-const showNotification = (message: string) => {
-    // Simple notification - you can replace this with a proper toast notification
-    alert(message);
+const showNotification = (message) => {
+        alert(message);
 };
 </script>
 

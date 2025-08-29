@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import AppLayouts from '../layout/AppLayouts.vue';
+import AppLayouts from '@/layout/AppLayouts.vue';
 export default {
   name: 'ContactUs',
   layout: AppLayouts,
