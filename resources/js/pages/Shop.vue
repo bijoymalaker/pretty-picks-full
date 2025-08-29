@@ -178,4 +178,3 @@ const filteredProducts = computed(() => {
     font-size: 0.75em;
 }
 </style>
-<style scoped></style>
