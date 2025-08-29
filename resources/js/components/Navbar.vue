@@ -24,8 +24,8 @@
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
                     <ul class="navbar-nav ms-2">
-                        <li class="nav-item">
-                            <a class="nav-link position-relative" href="#" @click.prevent="openWishlistDrawer">
+                        <li class="nav-item" v-if="user">
+                            <a class="nav-link position-relative" href="#" @click.prevent="openWishlistDrawer" :class="{ active: isActive('wishlist') }">
                                 <FontAwesomeIcon icon="fa-regular fa-heart" class="fs-4" />
                                 <span
                                     class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-danger">
@@ -51,7 +51,7 @@
                                 <li><Link class="dropdown-item" :href="route('logout')" method="post" as="button">Logout</Link></li>
                             </ul>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" v-if="user">
                             <a class="nav-link position-relative" href="#" @click.prevent="openCartDrawer">
                                 <FontAwesomeIcon icon="fa-solid fa-cart-arrow-down" class="fs-4" />
                                 <span
@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { Link, usePage } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
 import CartDrawer from './CartDrawer.vue'
@@ -80,11 +80,24 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useCartStore } from '../stores/cart'
 import { useWishlistStore } from '../stores/wishlist'
 
-const page = usePage<{ auth: { user: any } }>() // Define the type for page props
-const user = page.props.value ? page.props.value.auth.user : null
+const page = usePage() // page props from Inertia
+// Make `user` reactive so template updates when Inertia page props change
+const user = computed(() => page.props.value?.auth?.user ?? null)
 
-function isActive(routeName: string): boolean {
-  return route().current(routeName);
+// Debug: log page props and user to help troubleshoot why navbar changes aren't visible
+onMounted(() => {
+    console.log('[Navbar] mounted - page.props', page.props.value)
+    console.log('[Navbar] mounted - user', user.value)
+})
+
+watch(() => page.props.value, (val) => {
+    console.log('[Navbar] page.props changed', val)
+    console.log('[Navbar] user is now', user.value)
+})
+
+function isActive(routeName) {
+    // Use Inertia's page.url to check if the current route matches
+    return route().current(routeName) || page.props.value?.ziggy?.location?.includes(route(routeName));
 }
 
 // Initialize stores
@@ -92,21 +105,25 @@ const cartStore = useCartStore()
 const wishlistStore = useWishlistStore()
 
 // Drawer refs
-const cartDrawerRef = ref<{ openDrawer: () => void } | null>(null)
-const wishlistDrawerRef = ref<{ openDrawer: () => void } | null>(null)
+const cartDrawerRef = ref(null)
+const wishlistDrawerRef = ref(null)
 
 function openCartDrawer() {
-    if (!user) {
+    if (!user.value) {
         alert('Please login to access the cart.')
         return
     }
-    cartDrawerRef.value?.openDrawer()
+    if (cartDrawerRef.value && typeof cartDrawerRef.value.openDrawer === 'function') {
+        cartDrawerRef.value.openDrawer()
+    }
 }
 
 function openWishlistDrawer() {
-    if (!user) {
+    if (!user.value) {
         alert('Please login to access the wishlist.')
-        return
+    if (wishlistDrawerRef.value && typeof wishlistDrawerRef.value.openDrawer === 'function') {
+        wishlistDrawerRef.value.openDrawer()
+    }
     }
     wishlistDrawerRef.value?.openDrawer()
 }
