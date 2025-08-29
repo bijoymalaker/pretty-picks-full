@@ -1,7 +1,6 @@
 <script setup>
-import { ref } from 'vue';
 import { Link, useForm, router } from '@inertiajs/vue3';
-import AppLayouts from '../../layout/AppLayouts.vue';
+import AppLayouts from '@/layout/AppLayouts.vue';
 
 defineOptions({
   layout: AppLayouts,
@@ -23,7 +22,7 @@ const form = useForm({
 });
 
 function submit() {
-  form.post('/products', { onSuccess: () => form.reset() });
+  form.post('/products', { onSuccess: () => form.reset(), forceFormData: true });
 }
 
 function handleImageUpload(e) {

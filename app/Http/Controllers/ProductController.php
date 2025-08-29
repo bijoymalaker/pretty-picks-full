@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -43,21 +44,56 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $data = $request->validate([
-            'name' => 'required|string',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric',
-            'collection' => 'nullable|string|max:255',
-            'image' => 'nullable|image|max:2048',
-        ]);
+        try {
+            // Log the incoming request data for debugging
+            Log::info('Product update request received', [
+                'product_id' => $product->id,
+                'request_data' => $request->all(),
+                'has_file' => $request->hasFile('image')
+            ]);
 
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('products', 'public');
+            $validationRules = [
+                'name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'price' => 'required|numeric|min:0',
+                'collection' => 'nullable|string|max:255',
+            ];
+
+            // Only validate image if a new file is uploaded
+            if ($request->hasFile('image')) {
+                $validationRules['image'] = 'nullable|image|mimes:jpg,jpeg,png,webp';
+            }
+
+            $data = $request->validate($validationRules);
+
+            if ($request->hasFile('image')) {
+                // Delete old image if it exists
+                if ($product->image) {
+                    Storage::disk('public')->delete($product->image);
+                }
+                $data['image'] = $request->file('image')->store('products', 'public');
+            }
+
+            $product->update($data);
+
+            Log::info('Product updated successfully', ['product_id' => $product->id]);
+
+            return redirect()->back()->with('success', 'Product updated successfully!');
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation error during product update', [
+                'errors' => $e->errors(),
+                'product_id' => $product->id
+            ]);
+            return redirect()->back()->withErrors($e->errors())->withInput();
+            
+        } catch (\Exception $e) {
+            Log::error('Error updating product: ' . $e->getMessage(), [
+                'product_id' => $product->id,
+                'trace' => $e->getTraceAsString()
+            ]);
+            return redirect()->back()->with('error', 'Failed to update product. Please try again.');
         }
-
-        $product->update($data);
-
-        return redirect()->back()->with('success', 'Product updated');
     }
     
     public function edit(Product $product)
@@ -65,6 +101,12 @@ class ProductController extends Controller
         return Inertia::render('products/Edit', [
             'product' => $product
         ]);
+    }
+
+    // Show create form for admin
+    public function create()
+    {
+        return Inertia::render('admin/CreateProduct');
     }
 
 

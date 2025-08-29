@@ -62,8 +62,8 @@
           <!-- Products Table -->
           <div class="card shadow">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-              <h6 class="m-极 font-weight-bold text-primary">All Products</h6>
-              <Link :href="route('products.create')" class="btn btn-primary btn-sm">
+              <h6 class="m-5 font-weight-bold text-primary">All Products</h6>
+              <Link :href="route('products.index')" class="btn btn-primary btn-sm">
                 <i class="fas fa-plus me-1"></i>
                 Add Product
               </Link>
@@ -111,7 +111,6 @@
 <script setup lang="ts">
 import { Link, useForm } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
-import axios from 'axios'
 
 defineProps<{
   products: Array<{
@@ -129,16 +128,17 @@ function logout() {
   form.post(route('logout'))
 }
 
-async function deleteProduct(product: any) {
+function deleteProduct(product: any) {
   if (confirm('Are you sure you want to delete product: ' + product.name + '?')) {
-    try {
-        await axios.delete(`/api/products/${product.id}`); // Use correct API endpoint
+    form.delete(route('products.destroy', product.id), {
+      onSuccess: () => {
         alert('Product deleted: ' + product.name);
-        // Refresh the product list by reloading the page or emitting an event
-        window.location.reload();
-    } catch {
+        // Inertia will automatically handle the page refresh
+      },
+      onError: () => {
         alert('Failed to delete product: ' + product.name);
-    }
+      }
+    });
   }
 }
 </script>

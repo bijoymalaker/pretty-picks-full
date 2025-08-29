@@ -33,8 +33,6 @@ Route::get('blog', function () {
 
 Route::resource('products', ProductController::class);
 Route::resource('blogs', BlogController::class);
-Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
-Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
 
 
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');

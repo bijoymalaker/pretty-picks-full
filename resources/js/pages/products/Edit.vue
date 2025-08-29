@@ -43,6 +43,10 @@ function updateProduct() {
     onSuccess: () => {
       // You might want a more elegant notification here
       alert('Product updated successfully')
+    },
+    onError: (errors) => {
+      console.error('Update failed:', errors)
+      // Errors will be automatically displayed on the form fields
     }
   })
 }
@@ -95,7 +99,20 @@ function updateProduct() {
                   </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary" :disabled="form.processing">Update Product</button>
+                <!-- Display validation errors -->
+                <div v-if="Object.keys(form.errors).length > 0" class="alert alert-danger mt-3">
+                  <h6 class="alert-heading">Please fix the following errors:</h6>
+                  <ul class="mb-0">
+                    <li v-for="(error, field) in form.errors" :key="field">
+                      <strong>{{ field }}:</strong> {{ error }}
+                    </li>
+                  </ul>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3" :disabled="form.processing">
+                  <span v-if="form.processing">Updating...</span>
+                  <span v-else>Update Product</span>
+                </button>
               </form>
             </div>
           </div>
