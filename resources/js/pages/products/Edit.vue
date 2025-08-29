@@ -1,7 +1,7 @@
 <script setup>
 import { useForm, Link } from '@inertiajs/vue3'
 import { watch } from 'vue'
-import AppLayouts from '../../layout/AppLayouts.vue';
+import AppLayouts from '@/layout/AppLayouts.vue';
 
 defineOptions({
   layout: AppLayouts,
@@ -43,10 +43,13 @@ function updateProduct() {
     onSuccess: () => {
       // You might want a more elegant notification here
       alert('Product updated successfully')
+      // Optionally redirect back to products list
+      window.location.href = '/products'
     },
     onError: (errors) => {
       console.error('Update failed:', errors)
       // Errors will be automatically displayed on the form fields
+      alert('Failed to update product. Please check the console for errors.');
     }
   })
 }
