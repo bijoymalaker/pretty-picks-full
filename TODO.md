@@ -1,29 +1,14 @@
-# Product Update Fix - TODO List
+# Fix Cart and Wishlist Authentication Issues
 
-## Steps to Fix Product Update Issue
+## Steps to Complete:
 
-1. [x] Fix duplicate route definitions in routes/web.php
-2. [x] Add proper error handling and debugging to ProductController update method
-3. [x] Improve error handling in Edit.vue component
-4. [x] Fix admin Products.vue to use correct web routes instead of API endpoints
-5. [x] Fix image validation issue - only validate when new file uploaded
-6. [x] Add proper error display for validation messages
-7. [x] Test the product update functionality
+1. [x] Update cart.js store - Remove user authentication logic
+2. [x] Update wishlist.js store - Remove user authentication logic  
+3. [x] Update Navbar.vue - Add proper authentication checks for cart/wishlist access
+4. [x] Update CartDrawer.vue - Add authentication state awareness
+5. [x] Update WishlistDrawer.vue - Add authentication state awareness
+6. [ ] Test the authentication flow
+7. [ ] Verify functionality works when logged in
+8. [ ] Ensure proper error messages for unauthenticated users
 
-## Current Status
-- Fixed duplicate route conflicts
-- Added comprehensive error handling and logging
-- Fixed admin page to use consistent web routes
-- Fixed image validation to only apply when new file is uploaded
-- Added proper error display for validation messages
-- Routes verified and working correctly
-- Product update functionality should now work properly
-
-## Changes Made:
-- Removed duplicate route definitions in routes/web.php
-- Enhanced ProductController update method with proper error handling and logging
-- Improved frontend error handling in Edit.vue component
-- Fixed admin Products.vue to use web routes instead of API endpoints
-- Fixed image validation logic to prevent errors with existing large images
-- Added user-friendly error display for validation messages
-- Verified routes are correctly mapped
+## Current Status: Ready for testing

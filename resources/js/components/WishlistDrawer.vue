@@ -49,6 +49,7 @@
 
 <script setup>
 import { ref, watch, computed } from 'vue'
+import { usePage } from '@inertiajs/vue3'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useWishlistStore } from '../stores/wishlist'
 import { useCartStore } from '../stores/cart'
@@ -57,6 +58,12 @@ const wishlistStore = useWishlistStore()
 const cartStore = useCartStore()
 const isOpen = ref(false)
 const isClosing = ref(false)
+const page = usePage()
+
+// Get user authentication state
+const user = computed(() => {
+    return page.props.auth && page.props.auth.user ? page.props.auth.user : null
+})
 
 // Computed properties
 const wishlist = computed(() => wishlistStore.wishlist)
@@ -90,6 +97,10 @@ function formatPrice(price) {
 }
 
 function addToCart(product) {
+  if (!user.value) {
+    alert('Please login to add items to the cart.')
+    return
+  }
   cartStore.addToCart(product)
   wishlistStore.removeFromWishlist(product.id)
 }

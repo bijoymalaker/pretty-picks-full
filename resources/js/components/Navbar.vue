@@ -23,8 +23,10 @@
                             aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
-                    <ul class="navbar-nav ms-2">
-                        <li class="nav-item" v-if="user">
+
+
+                    <ul class="navbar-nav ms-2" v-if="user">
+                        <li class="nav-item">
                             <a class="nav-link position-relative" href="#" @click.prevent="openWishlistDrawer" :class="{ active: isActive('wishlist') }">
                                 <FontAwesomeIcon icon="fa-regular fa-heart" class="fs-4" />
                                 <span
@@ -34,15 +36,7 @@
                                 </span>
                             </a>
                         </li>
-                        <li class="nav-item" v-if="!user">
-                            <Link class="nav-link" :href="route('admin.login')" :class="{ active: isActive('admin.login') }">
-                            Admin Login</Link>
-                        </li>
-                        <li class="nav-item" v-if="!user">
-                            <Link class="nav-link" :href="route('login')" :class="{ active: isActive('login') }">
-                            Login/Register</Link>
-                        </li>
-                        <li class="nav-item dropdown" v-else>
+                        <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {{ user.name }}
                             </a>
@@ -62,6 +56,21 @@
                             </a>
                         </li>
                     </ul>
+
+
+                    <ul class="navbar-nav ms-2" v-else>
+                        
+                        <li class="nav-item">
+                            <Link class="nav-link" :href="route('admin.login')" :class="{ active: isActive('admin.login') }">
+                            Admin Login</Link>
+                        </li>
+                        <li class="nav-item">
+                            <Link class="nav-link" :href="route('login')" :class="{ active: isActive('login') }">
+                            Login/Register</Link>
+                        </li>
+                        
+                    </ul>
+                    
                 </div>
             </div>
         </nav>
@@ -82,7 +91,8 @@ import { useWishlistStore } from '../stores/wishlist'
 
 const page = usePage() // page props from Inertia
 // Make `user` reactive so template updates when Inertia page props change
-const user = computed(() => page.props.value?.auth?.user ?? null)
+
+const user = computed(() => usePage().props.auth && usePage().props.auth.user ? usePage().props.auth.user : null);
 
 // Debug: log page props and user to help troubleshoot why navbar changes aren't visible
 onMounted(() => {
@@ -121,11 +131,11 @@ function openCartDrawer() {
 function openWishlistDrawer() {
     if (!user.value) {
         alert('Please login to access the wishlist.')
+        return
+    }
     if (wishlistDrawerRef.value && typeof wishlistDrawerRef.value.openDrawer === 'function') {
         wishlistDrawerRef.value.openDrawer()
     }
-    }
-    wishlistDrawerRef.value?.openDrawer()
 }
 
 const navItems = [

@@ -1,13 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed, watch } from 'vue'
-import { usePage } from '@inertiajs/vue3'
 
 export const useCartStore = defineStore('cart', () => {
-    const page = usePage()
-const user = computed(() => {
-    return page.props.value && page.props.value.auth ? page.props.value.auth.user : null;
-})
-
     // Load cart from localStorage if available
     const loadCartFromStorage = () => {
         try {
@@ -39,10 +33,6 @@ const user = computed(() => {
     }, { deep: true })
     
     function addToCart(product, quantity = 1) {
-        if (!user.value) {
-            alert('Please login to add items to the cart.')
-            return
-        }
         const existingItem = cart.value.find(item => item.id === product.id)
         if (existingItem) {
             existingItem.qty += quantity
@@ -55,10 +45,6 @@ const user = computed(() => {
     }
     
     function removeFromCart(productId) {
-        if (!user.value) {
-            alert('Please login to remove items from the cart.')
-            return
-        }
         const index = cart.value.findIndex(item => item.id === productId)
         if (index > -1) {
             cart.value.splice(index, 1)
@@ -66,10 +52,6 @@ const user = computed(() => {
     }
     
     function updateQuantity(productId, quantity) {
-        if (!user.value) {
-            alert('Please login to update cart items.')
-            return
-        }
         const item = cart.value.find(item => item.id === productId)
         if (item) {
             item.qty = quantity
@@ -80,10 +62,6 @@ const user = computed(() => {
     }
     
     function clearCart() {
-        if (!user.value) {
-            alert('Please login to clear the cart.')
-            return
-        }
         cart.value = []
     }
     

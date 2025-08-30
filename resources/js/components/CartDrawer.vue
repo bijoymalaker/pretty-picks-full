@@ -83,13 +83,19 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
 import { route } from 'ziggy-js'
-import { router } from '@inertiajs/vue3'
+import { router, usePage } from '@inertiajs/vue3'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useCartStore } from '../stores/cart'
 
 const cartStore = useCartStore()
 const isOpen = ref(false)
 const isClosing = ref(false)
+const page = usePage()
+
+// Get user authentication state
+const user = computed(() => {
+    return page.props.auth && page.props.auth.user ? page.props.auth.user : null
+})
 
 // Computed properties
 const cart = computed(() => cartStore.cart)
@@ -142,6 +148,11 @@ function removeItem(productId) {
 }
 
 function checkout() {
+  if (!user.value) {
+    alert('Please login to proceed to checkout.')
+    return
+  }
+  
   closeDrawer()
   
   // Use Inertia to navigate to checkout with cart data
