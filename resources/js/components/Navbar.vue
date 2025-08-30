@@ -42,7 +42,11 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><Link class="dropdown-item" :href="route('profile.edit')">Profile</Link></li>
-                                <li><Link class="dropdown-item" :href="route('logout')" method="post" as="button">Logout</Link></li>
+                                <li>
+                                    <form @click="logout">
+                                        <button type="submit" class="dropdown-item">Logout</button>
+                                    </form>
+                                </li>
                             </ul>
                         </li>
                         <li class="nav-item" v-if="user">
@@ -81,7 +85,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import { Link, usePage } from '@inertiajs/vue3'
+import { Link, usePage, useForm } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
 import CartDrawer from './CartDrawer.vue'
 import WishlistDrawer from './WishlistDrawer.vue'
@@ -91,6 +95,8 @@ import { useWishlistStore } from '../stores/wishlist'
 
 const page = usePage() // page props from Inertia
 // Make `user` reactive so template updates when Inertia page props change
+
+const form = useForm()
 
 const user = computed(() => usePage().props.auth && usePage().props.auth.user ? usePage().props.auth.user : null);
 
@@ -145,6 +151,11 @@ const navItems = [
     { name: 'blog', route: 'blog', label: 'Blog' },
     { name: 'contact', route: 'contact', label: 'Contact' },
 ]
+
+function logout() {
+  form.post(route('logout'))
+}
+
 </script>
 
 <style scoped>

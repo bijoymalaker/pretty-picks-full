@@ -53,6 +53,9 @@ Route::get('/checkout', function () {
     return Inertia::render('Checkout');
 })->name('checkout');
 
+Route::post('/order', [\App\Http\Controllers\OrderController::class, 'store'])->name('order.store');
+Route::get('/order-confirmed/{order}', [\App\Http\Controllers\OrderController::class, 'show'])->name('order.confirmed');
+
 Route::get('/pro', function () {
     return Inertia::render('ProductDetails');
 })->name('productDetails');

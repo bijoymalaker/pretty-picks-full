@@ -170,18 +170,64 @@ const shipToDifferentAddress = ref(false)
 const orderNotes = ref('')
 const paymentMethod = ref('cashOnDelivery')
 
-const placeOrder = () => {
-  // Validate form and place order logic here
-  console.log('Billing Details:', billing.value)
-  console.log('Shipping Address:', shipToDifferentAddress.value ? shipping.value.address : billing.value.address)
-  console.log('Order Notes:', orderNotes.value)
-  console.log('Payment Method:', paymentMethod.value)
-  console.log('Cart Items:', cartStore.cart.value)
-  console.log('Total:', cartStore.cartTotal.value + 70)
-  
-  // Here you would typically send the order to your backend
-  // After successful order placement, clear the cart
-  // cartStore.clearCart()
+const placeOrder = async () => {
+  // Validate required fields
+  if (!billing.value.name || !billing.value.phone || !billing.value.address || 
+      !billing.value.district || !billing.value.thana) {
+    alert('Please fill in all required billing details.')
+    return
+  }
+
+  if (!paymentMethod.value) {
+    alert('Please select a payment method.')
+    return
+  }
+
+  if (cartStore.cart.length === 0) {
+    alert('Your cart is empty.')
+    return
+  }
+
+  try {
+    const orderData = {
+      billing_info: billing.value,
+      shipping_info: shipToDifferentAddress.value ? shipping.value : null,
+      payment_method: paymentMethod.value,
+      order_notes: orderNotes.value,
+      total_amount: cartStore.cartTotal + 70,
+      items: cartStore.cart.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        qty: item.qty
+      }))
+    }
+
+      const response = await fetch('/order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(orderData)
+      })
+
+    const result = await response.json()
+
+    if (result.success) {
+      // Clear cart after successful order
+      cartStore.clearCart()
+      
+      // Redirect to order confirmation page
+      window.location.href = `/order-confirmed/${result.order_id}`
+    } else {
+      alert('Failed to place order: ' + result.message)
+    }
+  } catch (error) {
+    console.error('Error placing order:', error)
+    alert('An error occurred while placing your order. Please try again.')
+  }
 }
 </script>
 
