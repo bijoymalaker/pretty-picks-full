@@ -145,34 +145,12 @@ import AppLayouts from '@/layout/AppLayouts.vue';
 import { useCartStore } from '../stores/cart';
 import { ref, watch } from 'vue';
 
-const props = defineProps({
-  cartData: {
-    type: Array,
-    default: () => []
-  },
-  total: {
-    type: Number,
-    default: 0
-  }
-})
-
 defineOptions({
   name: 'Checkout',
   layout: AppLayouts,
 })
 
 const cartStore = useCartStore()
-
-// Sync cart data from props to store if provided
-watch(() => props.cartData, (newCartData) => {
-  if (newCartData && newCartData.length > 0) {
-    // Clear existing cart and add items from props
-    cartStore.clearCart()
-    newCartData.forEach(item => {
-      cartStore.addToCart(item, item.qty)
-    })
-  }
-}, { immediate: true })
 
 const billing = ref({
   country: '',

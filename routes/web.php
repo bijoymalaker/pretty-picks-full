@@ -50,13 +50,7 @@ Route::get('/api/products/{id}', function ($id) {
 });
 
 Route::get('/checkout', function () {
-    $cartData = request('cart', []);
-    $total = request('total', 0);
-    
-    return Inertia::render('Checkout', [
-        'cartData' => $cartData,
-        'total' => $total
-    ]);
+    return Inertia::render('Checkout');
 })->name('checkout');
 
 Route::get('/pro', function () {

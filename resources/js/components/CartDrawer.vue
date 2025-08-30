@@ -153,16 +153,14 @@ function checkout() {
     return
   }
   
+  console.log('CartDrawer.vue checkout - cart:', cart.value)
+  console.log('CartDrawer.vue checkout - total:', cartTotal.value)
+  
   closeDrawer()
   
-  // Use Inertia to navigate to checkout with cart data
-  router.visit(route('checkout'), {
-    method: 'get',
-    data: {
-      cart: cart.value,
-      total: cartTotal.value
-    }
-  })
+  // Navigate to checkout without passing cart data through URL
+  // The checkout page will use the cart store directly
+  router.visit(route('checkout'))
 }
 
 // Reset isClosing when drawer is opened
