@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         {{-- Inline script to detect system dark mode preference and apply it immediately --}}
-        <script>
+        {{-- <script>
             (function() {
                 const appearance = '{{ $appearance ?? "system" }}';
 
@@ -18,7 +18,7 @@
                     }
                 }
             })();
-        </script>
+        </script> --}}
 
         {{-- Inline style to set the HTML background color based on our theme in app.css --}}
         <style>
@@ -26,9 +26,9 @@
                 background-color: oklch(1 0 0);
             }
 
-            html.dark {
+            /* html.dark {
                 background-color: oklch(0.145 0 0);
-            }
+            } */
         </style>
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
