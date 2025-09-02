@@ -30,7 +30,7 @@
                     <p>Customer Rating</p>
                   </div>
                 </div>
-                <Link :href="route('shop')" class="btn-primary">Shop Now</Link>
+                <Link :href="route('shop')" class="btn btn-danger">Shop Now</Link>
               </div>
             </div>
             <div class="col-lg-6 col-md-12">
@@ -122,32 +122,11 @@
             <p>The style experts behind Pretty Picks</p>
           </div>
           <div class="row">
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-3 col-md-6" v-for="(team, index) in fullTeam" :key="index">
               <div class="team-member">
-                <img src="https://i.ibb.co/0jZ8Z8Z/team1.jpg" alt="Emma Thompson" class="img-fluid" />
-                <h4>Emma Thompson</h4>
-                <p>Founder & CEO</p>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-              <div class="team-member">
-                <img src="https://i.ibb.co/4p8Z8Z8/team2.jpg" alt="Sophia Chen" class="img-fluid" />
-                <h4>Sophia Chen</h4>
-                <p>Fashion Director</p>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-              <div class="team-member">
-                <img src="https://i.ibb.co/8Z8Z8Z8/team3.jpg" alt="Olivia Rodriguez" class="img-fluid" />
-                <h4>Olivia Rodriguez</h4>
-                <p>Beauty Expert</p>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-              <div class="team-member">
-                <img src="https://i.ibb.co/Z8Z8Z8Z/team4.jpg" alt="Isabella Kim" class="img-fluid" />
-                <h4>Isabella Kim</h4>
-                <p>Customer Care</p>
+                <img :src="team.image" :alt="team.name" class="img-fluid" />
+                <h4>{{ team.name }}</h4>
+                <p>{{ team.designation }}</p>
               </div>
             </div>
           </div>
@@ -217,48 +196,8 @@
       </section>
 
       <!-- Contact Section -->
-      <section class="contact-section">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="contact-content">
-                <h2>Get In Touch</h2>
-                <p>Have questions about our products or need styling advice? We're here to help!</p>
-                <div class="contact-info">
-                  <div class="contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <span>hello@prettypicks.com</span>
-                  </div>
-                  <div class="contact-item">
-                    <i class="fas fa-phone"></i>
-                    <span>+1 (555) 987-6543</span>
-                  </div>
-                  <div class="contact-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>456 Fashion Avenue, Style City, SC 67890</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="contact-form">
-                <form>
-                  <div class="form-group">
-                    <input type="text" placeholder="Your Name" class="form-control" />
-                  </div>
-                  <div class="form-group">
-                    <input type="email" placeholder="Your Email" class="form-control" />
-                  </div>
-                  <div class="form-group">
-                    <textarea placeholder="Your Message" class="form-control" rows="5"></textarea>
-                  </div>
-                  <button type="submit" class="btn-primary">Send Message</button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+       <ContactForm />
+      
     </div>
   </AppLayouts>
 </template>
@@ -266,6 +205,23 @@
 import { Link } from '@inertiajs/vue3';
 import AppLayouts from '../layout/AppLayouts.vue';
 import { route } from 'ziggy-js';
+import ContactForm from '../components/ContactForm.vue';
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+
+const fullTeam = ref([]);
+
+onMounted(async () => {
+  try {
+    const response = await axios.get('/assets/fullTeam.json');
+    fullTeam.value = response.data;
+  } catch (error) {
+    console.error('Failed to load fullTeam.json:', error);
+  }
+});
+
+
+
 </script>
 <style scoped>
 /* Hero Section */
@@ -328,25 +284,6 @@ import { route } from 'ziggy-js';
   opacity: 0.8;
   text-transform: uppercase;
   letter-spacing: 1px;
-}
-
-.btn-primary {
-  background: #ff6b6b;
-  color: white;
-  padding: 15px 30px;
-  border: none;
-  border-radius: 50px;
-  font-size: 16px;
-  font-weight: 600;
-  text-decoration: none;
-  display: inline-block;
-  transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-  background: #ff5252;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
 }
 
 .hero-image img {
@@ -515,67 +452,7 @@ import { route } from 'ziggy-js';
   margin: 0;
 }
 
-/* Contact Section */
-.contact-section {
-  padding: 100px 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-}
 
-.contact-content h2 {
-  font-size: 36px;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-
-.contact-content p {
-  font-size: 18px;
-  margin-bottom: 40px;
-  opacity: 0.9;
-}
-
-.contact-info {
-  margin-bottom: 40px;
-}
-
-.contact-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.contact-item i {
-  font-size: 20px;
-  margin-right: 15px;
-  width: 30px;
-}
-
-.contact-item span {
-  font-size: 16px;
-}
-
-.contact-form .form-group {
-  margin-bottom: 20px;
-}
-
-.contact-form .form-control {
-  width: 100%;
-  padding: 15px;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-}
-
-.contact-form .form-control::placeholder {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.contact-form .form-control:focus {
-  outline: none;
-  background: rgba(255, 255, 255, 0.2);
-}
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -600,10 +477,6 @@ import { route } from 'ziggy-js';
   .feature-item i {
     margin-right: 0;
     margin-bottom: 10px;
-  }
-
-  .contact-section .row {
-    flex-direction: column;
   }
 }
 </style>
