@@ -12,6 +12,21 @@
                             <p class="mb-0">Your payment has been processed successfully.</p>
                         </div>
 
+                        <div v-if="order_details" class="order-details mb-4">
+                            <h5>Order Details:</h5>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <p><strong>Transaction ID:</strong> {{ order_details.transaction_id }}</p>
+                                    <p><strong>Amount:</strong> {{ order_details.amount }} {{ order_details.currency }}</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <p><strong>Customer:</strong> {{ order_details.name }}</p>
+                                    <p><strong>Email:</strong> {{ order_details.email }}</p>
+                                    <p><strong>Status:</strong> <span class="badge bg-success">{{ order_details.status }}</span></p>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="text-center mt-4">
                             <p>You will receive a confirmation email shortly.</p>
                             <router-link to="/" class="btn btn-primary me-2">Continue Shopping</router-link>
@@ -26,23 +41,11 @@
 
 <script setup>
 import AppLayouts from '@/layout/AppLayouts.vue';
-import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
 
-const route = useRoute();
-const order = ref(null);
-
-onMounted(async () => {
-  const orderId = route.query.order;
-  if (orderId) {
-    try {
-      const response = await fetch(`/api/orders/${orderId}`);
-      if (response.ok) {
-        order.value = await response.json();
-      }
-    } catch (error) {
-      console.error('Failed to fetch order details:', error);
-    }
+defineProps({
+  order_details: {
+    type: Object,
+    default: null
   }
 });
 

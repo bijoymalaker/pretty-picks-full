@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BlogController;
@@ -142,16 +144,52 @@ Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
 Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
 
 // Payment Status Pages
-Route::get('/success', function () {
-    return Inertia::render('payment/PaymentSuccess');
+Route::get('/success', function (Request $request) {
+    $tran_id = $request->query('tran_id');
+    $order_details = null;
+
+    if ($tran_id) {
+        $order_details = DB::table('orders')
+            ->where('transaction_id', $tran_id)
+            ->select('transaction_id', 'status', 'currency', 'amount', 'name', 'email')
+            ->first();
+    }
+
+    return Inertia::render('payment/PaymentSuccess', [
+        'order_details' => $order_details
+    ]);
 })->name('payment.success');
 
-Route::get('/fail', function () {
-    return Inertia::render('payment/PaymentFail');
+Route::get('/fail', function (Request $request) {
+    $tran_id = $request->query('tran_id');
+    $order_details = null;
+
+    if ($tran_id) {
+        $order_details = DB::table('orders')
+            ->where('transaction_id', $tran_id)
+            ->select('transaction_id', 'status', 'currency', 'amount', 'name', 'email')
+            ->first();
+    }
+
+    return Inertia::render('payment/PaymentFail', [
+        'order_details' => $order_details
+    ]);
 })->name('payment.fail');
 
-Route::get('/cancel', function () {
-    return Inertia::render('payment/PaymentCancel');
+Route::get('/cancel', function (Request $request) {
+    $tran_id = $request->query('tran_id');
+    $order_details = null;
+
+    if ($tran_id) {
+        $order_details = DB::table('orders')
+            ->where('transaction_id', $tran_id)
+            ->select('transaction_id', 'status', 'currency', 'amount', 'name', 'email')
+            ->first();
+    }
+
+    return Inertia::render('payment/PaymentCancel', [
+        'order_details' => $order_details
+    ]);
 })->name('payment.cancel');
 
 //SSLCOMMERZ END

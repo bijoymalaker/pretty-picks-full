@@ -170,9 +170,9 @@ const shipToDifferentAddress = ref(false)
 const orderNotes = ref('')
 const paymentMethod = ref('cashOnDelivery')
 
-const placeOrder = async () => {
+const placeOrder = () => {
   // Validate required fields
-  if (!billing.value.name || !billing.value.phone || !billing.value.address || 
+  if (!billing.value.name || !billing.value.phone || !billing.value.address ||
       !billing.value.district || !billing.value.thana) {
     alert('Please fill in all required billing details.')
     return
@@ -188,46 +188,57 @@ const placeOrder = async () => {
     return
   }
 
-  try {
-    const orderData = {
-      billing_info: billing.value,
-      shipping_info: shipToDifferentAddress.value ? shipping.value : null,
-      payment_method: paymentMethod.value,
-      order_notes: orderNotes.value,
-      total_amount: cartStore.cartTotal + 70,
-      items: cartStore.cart.map(item => ({
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        qty: item.qty
-      }))
-    }
-
-      const response = await fetch('/order', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify(orderData)
-      })
-
-    const result = await response.json()
-
-    if (result.success) {
-      // Clear cart after successful order
-      cartStore.clearCart()
-      
-      // Redirect to order confirmation page
-      window.location.href = `/order-confirmed/${result.order_id}`
-    } else {
-      alert('Failed to place order: ' + result.message)
-    }
-  } catch (error) {
-    console.error('Error placing order:', error)
-    alert('An error occurred while placing your order. Please try again.')
+  // Create form data to submit to /pay
+  const formData = {
+    billing_info: billing.value,
+    shipping_info: shipToDifferentAddress.value ? shipping.value : null,
+    payment_method: paymentMethod.value,
+    order_notes: orderNotes.value,
+    total_amount: cartStore.cartTotal + 70,
+    items: cartStore.cart.map(item => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      qty: item.qty
+    }))
   }
+
+  // Create a form element and submit it to mimic the exampleHosted.blade.php behavior
+  const form = document.createElement('form')
+  form.method = 'POST'
+  form.action = '/pay'
+
+  // Add CSRF token
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+  const csrfInput = document.createElement('input')
+  csrfInput.type = 'hidden'
+  csrfInput.name = '_token'
+  csrfInput.value = csrfToken
+  form.appendChild(csrfInput)
+
+  // Add form data as hidden inputs
+  Object.keys(formData).forEach(key => {
+    if (typeof formData[key] === 'object' && formData[key] !== null) {
+      // Handle nested objects
+      Object.keys(formData[key]).forEach(subKey => {
+        const input = document.createElement('input')
+        input.type = 'hidden'
+        input.name = `${key}[${subKey}]`
+        input.value = formData[key][subKey] || ''
+        form.appendChild(input)
+      })
+    } else {
+      const input = document.createElement('input')
+      input.type = 'hidden'
+      input.name = key
+      input.value = formData[key] || ''
+      form.appendChild(input)
+    }
+  })
+
+  // Append form to body and submit
+  document.body.appendChild(form)
+  form.submit()
 }
 </script>
 

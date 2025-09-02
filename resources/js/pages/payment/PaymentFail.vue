@@ -12,6 +12,21 @@
                             <p class="mb-0">Unfortunately, your payment could not be processed.</p>
                         </div>
 
+                        <div v-if="order_details" class="order-details mb-4">
+                            <h5>Order Details:</h5>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <p><strong>Transaction ID:</strong> {{ order_details.transaction_id }}</p>
+                                    <p><strong>Amount:</strong> {{ order_details.amount }} {{ order_details.currency }}</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <p><strong>Customer:</strong> {{ order_details.name }}</p>
+                                    <p><strong>Email:</strong> {{ order_details.email }}</p>
+                                    <p><strong>Status:</strong> <span class="badge bg-danger">{{ order_details.status }}</span></p>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="text-center mt-4">
                             <p>Please try again or contact support if the issue persists.</p>
                             <router-link to="/checkout" class="btn btn-primary me-2">Try Again</router-link>
@@ -26,6 +41,13 @@
 
 <script setup>
 import AppLayouts from '@/layout/AppLayouts.vue';
+
+defineProps({
+  order_details: {
+    type: Object,
+    default: null
+  }
+});
 
 defineOptions({
   name: 'PaymentFail',

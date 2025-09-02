@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Library\SslCommerz\SslCommerzNotification;
 use Inertia\Inertia;
@@ -26,35 +26,48 @@ class SslCommerzPaymentController extends Controller
         # Let's say, your oder transaction informations are saving in a table called "orders"
         # In "orders" table, order unique identity is "transaction_id". "status" field contain status of the transaction, "amount" is the order amount to be paid and "currency" is for storing Site Currency which will be checked with paid currency.
 
+        $data = $request->all();
+
         $post_data = array();
-        $post_data['total_amount'] = '10'; # You cant not pay less than 10
+        $post_data['total_amount'] = $data['total_amount'] ?? '10'; # You cant not pay less than 10
         $post_data['currency'] = "BDT";
         $post_data['tran_id'] = uniqid(); // tran_id must be unique
 
         # CUSTOMER INFORMATION
-        $post_data['cus_name'] = 'Customer Name';
-        $post_data['cus_email'] = 'customer@mail.com';
-        $post_data['cus_add1'] = 'Customer Address';
+        $post_data['cus_name'] = $data['billing_info']['name'] ?? 'Customer Name';
+        $post_data['cus_email'] = $data['billing_info']['email'] ?? 'customer@mail.com';
+        $post_data['cus_add1'] = $data['billing_info']['address'] ?? 'Customer Address';
         $post_data['cus_add2'] = "";
-        $post_data['cus_city'] = "";
-        $post_data['cus_state'] = "";
+        $post_data['cus_city'] = $data['billing_info']['district'] ?? "";
+        $post_data['cus_state'] = $data['billing_info']['thana'] ?? "";
         $post_data['cus_postcode'] = "";
-        $post_data['cus_country'] = "Bangladesh";
-        $post_data['cus_phone'] = '8801XXXXXXXXX';
+        $post_data['cus_country'] = $data['billing_info']['country'] ?? "Bangladesh";
+        $post_data['cus_phone'] = $data['billing_info']['phone'] ?? '8801XXXXXXXXX';
         $post_data['cus_fax'] = "";
 
         # SHIPMENT INFORMATION
-        $post_data['ship_name'] = "Store Test";
-        $post_data['ship_add1'] = "Dhaka";
-        $post_data['ship_add2'] = "Dhaka";
-        $post_data['ship_city'] = "Dhaka";
-        $post_data['ship_state'] = "Dhaka";
-        $post_data['ship_postcode'] = "1000";
-        $post_data['ship_phone'] = "";
-        $post_data['ship_country'] = "Bangladesh";
+        if (!empty($data['shipping_info'])) {
+            $post_data['ship_name'] = $data['billing_info']['name'] ?? "Store Test";
+            $post_data['ship_add1'] = $data['shipping_info']['address'] ?? "Dhaka";
+            $post_data['ship_add2'] = "";
+            $post_data['ship_city'] = $data['billing_info']['district'] ?? "Dhaka";
+            $post_data['ship_state'] = $data['billing_info']['thana'] ?? "Dhaka";
+            $post_data['ship_postcode'] = "1000";
+            $post_data['ship_phone'] = $data['billing_info']['phone'] ?? "";
+            $post_data['ship_country'] = $data['billing_info']['country'] ?? "Bangladesh";
+        } else {
+            $post_data['ship_name'] = $data['billing_info']['name'] ?? "Store Test";
+            $post_data['ship_add1'] = $data['billing_info']['address'] ?? "Dhaka";
+            $post_data['ship_add2'] = "";
+            $post_data['ship_city'] = $data['billing_info']['district'] ?? "Dhaka";
+            $post_data['ship_state'] = $data['billing_info']['thana'] ?? "Dhaka";
+            $post_data['ship_postcode'] = "1000";
+            $post_data['ship_phone'] = $data['billing_info']['phone'] ?? "";
+            $post_data['ship_country'] = $data['billing_info']['country'] ?? "Bangladesh";
+        }
 
         $post_data['shipping_method'] = "NO";
-        $post_data['product_name'] = "Computer";
+        $post_data['product_name'] = "Order Payment";
         $post_data['product_category'] = "Goods";
         $post_data['product_profile'] = "physical-goods";
 
@@ -92,15 +105,13 @@ class SslCommerzPaymentController extends Controller
 
     public function success(Request $request)
     {
-        //echo "Transaction is Successful";
-
         $tran_id = $request->input('tran_id');
         $amount = $request->input('amount');
         $currency = $request->input('currency');
 
         $sslc = new SslCommerzNotification();
 
-        #Check order status in order tabel against the transaction id or order id.
+        #Check order status in order table against the transaction id or order id.
         $order_details = DB::table('orders')
             ->where('transaction_id', $tran_id)
             ->select('transaction_id', 'status', 'currency', 'amount')->first();
@@ -118,24 +129,20 @@ class SslCommerzPaymentController extends Controller
                     ->where('transaction_id', $tran_id)
                     ->update(['status' => 'Processing']);
 
-                //echo "<br >Transaction is successfully Completed";
-                return Inertia::render('payment/PaymentSuccess')-> $order_details;
+                // Redirect to success page with order details
+                return redirect()->route('payment.success', ['tran_id' => $tran_id]);
 
             }
         } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
             /*
-             That means through IPN Order status already updated. Now you can just show the customer that transaction is completed. No need to udate database.
+             That means through IPN Order status already updated. Now you can just show the customer that transaction is completed. No need to update database.
              */
-            //echo "Transaction is successfully Completed";
-            return Inertia::render('payment/PaymentSuccess')-> $order_details;
+            return redirect()->route('payment.success', ['tran_id' => $tran_id]);
 
         } else {
             #That means something wrong happened. You can redirect customer to your product page.
-            //echo "Invalid Transaction";
-            return Inertia::render('payment/PaymentFailed')-> $order_details;
+            return redirect()->route('payment.fail', ['tran_id' => $tran_id]);
         }
-
-
     }
 
     public function fail(Request $request)
@@ -150,17 +157,14 @@ class SslCommerzPaymentController extends Controller
             $update_product = DB::table('orders')
                 ->where('transaction_id', $tran_id)
                 ->update(['status' => 'Failed']);
-            //echo "Transaction is Falied";
-            return Inertia::render('payment/PaymentFailed')-> $order_details;
+
+            return redirect()->route('payment.fail', ['tran_id' => $tran_id]);
 
         } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
-            echo "Transaction is already Successful";
-            return Inertia::render('payment/PaymentSuccess')-> $order_details;
+            return redirect()->route('payment.success', ['tran_id' => $tran_id]);
         } else {
-            echo "Transaction is Invalid";
-            return Inertia::render('payment/PaymentFailed')-> $order_details;
+            return redirect()->route('payment.fail', ['tran_id' => $tran_id]);
         }
-
     }
 
     public function cancel(Request $request)
@@ -175,17 +179,13 @@ class SslCommerzPaymentController extends Controller
             $update_product = DB::table('orders')
                 ->where('transaction_id', $tran_id)
                 ->update(['status' => 'Canceled']);
-            echo "Transaction is Cancel";
+
+            return redirect()->route('payment.cancel', ['tran_id' => $tran_id]);
         } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
-            //echo "Transaction is already Successful";
-            return Inertia::render('payment/PaymentSuccess')-> $order_details;
-
+            return redirect()->route('payment.success', ['tran_id' => $tran_id]);
         } else {
-            echo "Transaction is Invalid";
-            return Inertia::render('payment/PaymentFailed')-> $order_details;
+            return redirect()->route('payment.cancel', ['tran_id' => $tran_id]);
         }
-
-
     }
 
     public function ipn(Request $request)
