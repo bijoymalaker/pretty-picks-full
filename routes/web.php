@@ -112,20 +112,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 'users' => $users
             ]);
         })->name('users');
-        
-        Route::get('products', function () {
+
+        Route::get('product-list', function () {
             $products = \App\Models\Product::all();
             return Inertia::render('admin/Products', [
                 'products' => $products
             ]);
-        })->name('products');
-        
-        Route::get('blogs', function () {
+        })->name('products.list');
+
+        Route::get('blog-list', function () {
             $blogs = \App\Models\Blog::all();
             return Inertia::render('admin/Blogs', [
                 'blogs' => $blogs
             ]);
-        })->name('blogs');
+        })->name('blogs.list');
     });
 });
 

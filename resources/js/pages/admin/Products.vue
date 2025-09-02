@@ -14,7 +14,7 @@
                 Dashboard
               </Link>
             </li>
-            <li class极="nav-item">
+            <li class="nav-item">
               <Link :href="route('admin.users')" class="nav-link text-white">
                 <i class="fas fa-users me-2"></i>
                 Users
