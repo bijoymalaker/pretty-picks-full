@@ -56,8 +56,8 @@ Route::get('/checkout', function () {
     return Inertia::render('Checkout');
 })->name('checkout');
 
-Route::post('/order', [\App\Http\Controllers\OrderController::class, 'store'])->name('order.store');
-Route::get('/order-confirmed/{order}', [\App\Http\Controllers\OrderController::class, 'show'])->name('order.confirmed');
+Route::post('/order', [SslCommerzPaymentController::class, 'store'])->name('order.store');
+Route::get('/order-confirmed/{order}', [SslCommerzPaymentController::class, 'show'])->name('order.confirmed');
 
 Route::get('/pro', function () {
     return Inertia::render('ProductDetails');
@@ -132,10 +132,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 // SSLCOMMERZ Start
-Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
 
 Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
-Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
 
 Route::post('/success', [SslCommerzPaymentController::class, 'success']);
 Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
