@@ -10,11 +10,6 @@ use Inertia\Inertia;
 class SslCommerzPaymentController extends Controller
 {
 
-    public function exampleEasyCheckout()
-    {
-        return view('exampleEasycheckout');
-    }
-
     public function exampleHostedCheckout()
     {
         return view('exampleHosted');
@@ -29,7 +24,7 @@ class SslCommerzPaymentController extends Controller
         $data = $request->all();
 
         $post_data = array();
-        $post_data['total_amount'] = $data['total_amount'] ?? '10'; # You cant not pay less than 10
+        $post_data['total_amount'] = $data['total_amount']; # You cant not pay less than 10
         $post_data['currency'] = "BDT";
         $post_data['tran_id'] = uniqid(); // tran_id must be unique
 

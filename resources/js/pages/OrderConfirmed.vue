@@ -128,7 +128,6 @@
 
 <script setup>
 import AppLayouts from '@/layout/AppLayouts.vue';
-import { computed } from 'vue';
 
 defineOptions({
   name: 'OrderConfirmed',

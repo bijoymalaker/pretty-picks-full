@@ -28,7 +28,6 @@
                         </div>
 
                         <div class="text-center mt-4">
-                            <p>You will receive a confirmation email shortly.</p>
                             <router-link to="/" class="btn btn-primary me-2">Continue Shopping</router-link>
                             <router-link to="/shop" class="btn btn-outline-secondary">Browse More Products</router-link>
                         </div>

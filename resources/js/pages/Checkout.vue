@@ -7,7 +7,7 @@
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label for="country">Country/Region</label>
-                            <select class="custom-select" id="country" v-model="billing.country">
+                            <select class="custom-select" id="country" v-model="billing.country" required>
                                 <option value="">Choose...</option>
                                 <option value="bangladesh">Bangladesh</option>
                             </select>
@@ -243,5 +243,5 @@ const placeOrder = () => {
 </script>
 
 <style scoped>
-/* Add your custom styles here */
+
 </style>
