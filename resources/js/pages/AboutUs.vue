@@ -1,316 +1,609 @@
 <template>
-  <section class="about-section">
-      <div class="container">
-          <div class="row">                
-              <div class="content-column col-lg-6 col-md-12 col-sm-12 order-2">
-                  <div class="inner-column">
-                      <div class="sec-title">
-                          <span class="title">About Company</span>
-                          <h2>We are leader in <br>Industrial market Since 1992</h2>
-                      </div>
-                      <div class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                      quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                      cillum dolore eu fugiat nulla pariatur.</div>
-                      <ul class="list-style-one">
-                          <li>Lorem Ipsum is simply dummy tex</li>
-                          <li>Consectetur adipisicing elit</li>
-                          <li>Sed do eiusmod tempor incididunt</li>
-                      </ul>
-                      <div class="btn-box">
-                          <a href="#" class="theme-btn btn-style-one">Contact Us</a>
-                      </div>
+  <AppLayouts>
+    <div class="about-us-page">
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-lg-6 col-md-12">
+              <div class="hero-content">
+                <span class="subtitle">About Pretty Picks</span>
+                <h1>Curating Beauty and Style Since 2025</h1>
+                <p>
+                  At Pretty Picks, we believe that everyone deserves to feel beautiful and confident. Our carefully
+                  curated
+                  collection of fashion, beauty, and lifestyle products brings you the latest trends and timeless
+                  classics, all in
+                  one place.
+                </p>
+                <div class="hero-stats">
+                  <div class="stat">
+                    <h3>50K+</h3>
+                    <p>Happy Customers</p>
                   </div>
-              </div>
-
-              <!-- Image Column -->
-              <div class="image-column col-lg-6 col-md-12 col-sm-12">
-                  <div class="inner-column wow fadeInLeft">
-                      <figure class="image-1"><a href="#" class="lightbox-image" data-fancybox="images"><img src="https://i.ibb.co/QP6Nmpf/image-1-about.jpg" alt=""></a></figure>
-                      <figure class="image-2"><a href="#" class="lightbox-image" data-fancybox="images"><img src="https://i.ibb.co/JvN0NVB/image-2-about.jpg" alt=""></a></figure>
+                  <div class="stat">
+                    <h3>1000+</h3>
+                    <p>Premium Products</p>
                   </div>
+                  <div class="stat">
+                    <h3>4.9/5</h3>
+                    <p>Customer Rating</p>
+                  </div>
+                </div>
+                <Link :href="route('shop')" class="btn-primary">Shop Now</Link>
               </div>
+            </div>
+            <div class="col-lg-6 col-md-12">
+              <div class="hero-image">
+                <img src="https://i.ibb.co/0jZ8Z8Z/pretty-picks-hero.jpg" alt="Pretty Picks Fashion Collection"
+                  class="img-fluid" />
+              </div>
+            </div>
           </div>
-      </div>
-  </section>
+        </div>
+      </section>
+
+      <!-- Our Story Section -->
+      <section class="story-section">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="story-image">
+                <img src="https://i.ibb.co/4p8Z8Z8/pretty-picks-story.jpg" alt="Our Story" class="img-fluid" />
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="story-content">
+                <h2>Our Story</h2>
+                <p>
+                  Founded in 2020, Pretty Picks was born from a passion for fashion and beauty. Our founder, a style
+                  enthusiast with
+                  years of experience in the industry, saw the need for a curated online destination that offers quality
+                  products at
+                  affordable prices.
+                </p>
+                <p>
+                  Today, we proudly serve fashion lovers across the globe, offering a carefully selected range of
+                  clothing,
+                  accessories, beauty products, and lifestyle items. Our commitment to quality, style, and customer
+                  satisfaction has
+                  made us a trusted name in online shopping.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Our Values Section -->
+      <section class="values-section">
+        <div class="container">
+          <div class="section-title">
+            <h2>Our Values</h2>
+            <p>What drives us every day</p>
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-md-6">
+              <div class="value-card">
+                <div class="value-icon">
+                  <i class="fas fa-heart"></i>
+                </div>
+                <h3>Passion for Style</h3>
+                <p>We are passionate about fashion and beauty, curating products that make you feel amazing.</p>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+              <div class="value-card">
+                <div class="value-icon">
+                  <i class="fas fa-users"></i>
+                </div>
+                <h3>Customer First</h3>
+                <p>Your satisfaction and happiness are at the heart of everything we do.</p>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+              <div class="value-card">
+                <div class="value-icon">
+                  <i class="fas fa-leaf"></i>
+                </div>
+                <h3>Sustainability</h3>
+                <p>We are committed to eco-friendly practices and ethical sourcing.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Our Team Section -->
+      <section class="team-section">
+        <div class="container">
+          <div class="section-title">
+            <h2>Meet Our Team</h2>
+            <p>The style experts behind Pretty Picks</p>
+          </div>
+          <div class="row">
+            <div class="col-lg-3 col-md-6">
+              <div class="team-member">
+                <img src="https://i.ibb.co/0jZ8Z8Z/team1.jpg" alt="Emma Thompson" class="img-fluid" />
+                <h4>Emma Thompson</h4>
+                <p>Founder & CEO</p>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <div class="team-member">
+                <img src="https://i.ibb.co/4p8Z8Z8/team2.jpg" alt="Sophia Chen" class="img-fluid" />
+                <h4>Sophia Chen</h4>
+                <p>Fashion Director</p>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <div class="team-member">
+                <img src="https://i.ibb.co/8Z8Z8Z8/team3.jpg" alt="Olivia Rodriguez" class="img-fluid" />
+                <h4>Olivia Rodriguez</h4>
+                <p>Beauty Expert</p>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <div class="team-member">
+                <img src="https://i.ibb.co/Z8Z8Z8Z/team4.jpg" alt="Isabella Kim" class="img-fluid" />
+                <h4>Isabella Kim</h4>
+                <p>Customer Care</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Why Choose Us Section -->
+      <section class="why-choose-section">
+        <div class="container">
+          <div class="section-title">
+            <h2>Why Choose Pretty Picks?</h2>
+            <p>Discover what sets us apart</p>
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="feature-list">
+                <div class="feature-item">
+                  <i class="fas fa-star"></i>
+                  <div>
+                    <h4>Curated Selection</h4>
+                    <p>Handpicked fashion and beauty products from top brands</p>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <i class="fas fa-truck"></i>
+                  <div>
+                    <h4>Free Shipping</h4>
+                    <p>Free delivery on orders over $50</p>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <i class="fas fa-mobile-alt"></i>
+                  <div>
+                    <h4>Mobile Shopping</h4>
+                    <p>Shop on-the-go with our mobile-optimized app</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="feature-list">
+                <div class="feature-item">
+                  <i class="fas fa-undo"></i>
+                  <div>
+                    <h4>Easy Returns</h4>
+                    <p>30-day return policy for your peace of mind</p>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <i class="fas fa-headset"></i>
+                  <div>
+                    <h4>Style Advice</h4>
+                    <p>Personal styling tips from our fashion experts</p>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <i class="fas fa-gift"></i>
+                  <div>
+                    <h4>Loyalty Rewards</h4>
+                    <p>Earn points on every purchase for exclusive discounts</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section class="contact-section">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="contact-content">
+                <h2>Get In Touch</h2>
+                <p>Have questions about our products or need styling advice? We're here to help!</p>
+                <div class="contact-info">
+                  <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>hello@prettypicks.com</span>
+                  </div>
+                  <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+1 (555) 987-6543</span>
+                  </div>
+                  <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>456 Fashion Avenue, Style City, SC 67890</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="contact-form">
+                <form>
+                  <div class="form-group">
+                    <input type="text" placeholder="Your Name" class="form-control" />
+                  </div>
+                  <div class="form-group">
+                    <input type="email" placeholder="Your Email" class="form-control" />
+                  </div>
+                  <div class="form-group">
+                    <textarea placeholder="Your Message" class="form-control" rows="5"></textarea>
+                  </div>
+                  <button type="submit" class="btn-primary">Send Message</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </AppLayouts>
 </template>
-<script>
+<script setup>
+import { Link } from '@inertiajs/vue3';
 import AppLayouts from '../layout/AppLayouts.vue';
-export default {
-    name: 'AboutUs',
-    layout: AppLayouts,
-}
+import { route } from 'ziggy-js';
 </script>
 <style scoped>
-       h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6,
-        a,
-        a:hover,
-        a:focus,
-        a:active {
-            text-decoration: none;
-            outline: none;
-        }
-        
-        a,
-        a:active,
-        a:focus {
-            color: #6f6f6f;
-            text-decoration: none;
-            transition-timing-function: ease-in-out;
-            -ms-transition-timing-function: ease-in-out;
-            -moz-transition-timing-function: ease-in-out;
-            -webkit-transition-timing-function: ease-in-out;
-            -o-transition-timing-function: ease-in-out;
-            transition-duration: .2s;
-            -ms-transition-duration: .2s;
-            -moz-transition-duration: .2s;
-            -webkit-transition-duration: .2s;
-            -o-transition-duration: .2s;
-        }
-        
-        ul {
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-        img {
-    max-width: 100%;
-    height: auto;
-}
-        section {
-            padding: 60px 0;
-           /* min-height: 100vh;*/
-        }
-
-.sec-title{
-  position:relative;
-  z-index: 1;
-  margin-bottom:60px;
-}
-
-.sec-title .title{
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 100px 0;
   position: relative;
+  overflow: hidden;
+}
+
+/* .hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="80" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="60" r="1" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+  opacity: 0.3;
+} */
+
+.hero-content .subtitle {
   display: block;
   font-size: 18px;
-  line-height: 24px;
-  color: #ff2222;
-  font-weight: 500;
-  margin-bottom: 15px;
-}
-
-.sec-title h2{
-  position: relative;
-  display: block;
-  font-size:40px;
-  line-height: 1.28em;
-  color: #222222;
   font-weight: 600;
-  padding-bottom:18px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
-.sec-title h2:before{
-  position:absolute;
-  content:'';
-  left:0px;
-  bottom:0px;
-  width:50px;
-  height:3px;
-  background-color:#d1d2d6;
+.hero-content h1 {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  line-height: 1.2;
 }
 
-.sec-title .text{
-  position: relative;
-  font-size: 16px;
-  line-height: 26px;
-  color: #848484;
-  font-weight: 400;
-  margin-top: 35px;
-}
-
-.sec-title.light h2{
-  color: #ffffff;
-}
-
-.sec-title.text-center h2:before{
-  left:50%;
-  margin-left: -25px;
-}
-
-.list-style-one{
-  position:relative;
-}
-
-.list-style-one li{
-  position:relative;
-  font-size:16px;
-  line-height:26px;
-  color: #222222;
-  font-weight:400;
-  padding-left:35px;
-  margin-bottom: 12px;
-}
-
-.list-style-one li:before {
-    content: "\f058";
-    position: absolute;
-    left: 0;
-    top: 0px;
-    display: block;
-    font-size: 18px;
-    padding: 0px;
-    color: #ff2222;
-    font-weight: 600;
-    -moz-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-    font-style: normal;
-    font-variant: normal;
-    text-rendering: auto;
-    line-height: 1.6;
-    font-family: "Font Awesome 5 Free";
-}
-
-.list-style-one li a:hover{
-  color: #44bce2;
-}
-
-.btn-style-one{
-  position: relative;
-  display: inline-block;
-  font-size: 17px;
-  line-height: 30px;
-  color: #ffffff;
-  padding: 10px 30px;
-  font-weight: 600;
-  overflow: hidden;
-  letter-spacing: 0.02em;
-  background-color: #ff2222;
-}
-
-.btn-style-one:hover{
-  background-color: #001e57;
-  color: #ffffff;
-}
-.about-section{
-  position: relative;
-  padding: 120px 0 70px;
-}
-
-.about-section .sec-title{
-  margin-bottom: 45px;
-}
-
-.about-section .content-column{
-  position: relative;
-  margin-bottom: 50px;
-}
-
-.about-section .content-column .inner-column{
-  position: relative;
-  padding-left: 30px;
-}
-
-.about-section .text{
+.hero-content p {
+  font-size: 18px;
+  line-height: 1.6;
   margin-bottom: 40px;
+  opacity: 0.9;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.hero-stats .stat h3 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.hero-stats .stat p {
+  font-size: 14px;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-primary {
+  background: #ff6b6b;
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 50px;
   font-size: 16px;
-  line-height: 26px;
-  color: #848484;
-  font-weight: 400;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
 }
 
-.about-section .list-style-one{
-  margin-bottom: 45px;
+.btn-primary:hover {
+  background: #ff5252;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
 }
 
-.about-section .btn-box{
-  position: relative;
+.hero-image img {
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
-.about-section .btn-box a{
-  padding: 15px 50px;
+/* Story Section */
+.story-section {
+  padding: 100px 0;
+  background: #f8f9fa;
 }
 
-.about-section .image-column{
-  position: relative;
+.story-content h2 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #2c3e50;
 }
 
-.about-section .image-column .text-layer{
-    position: absolute;
-    right: -110px;
-    top: 50%;
-    font-size: 325px;
-    line-height: 1em;
-    color: #ffffff;
-    margin-top: -175px;
-    font-weight: 500;
+.story-content p {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  color: #5a6c7d;
 }
 
-.about-section .image-column .inner-column{
-  position: relative;
-  padding-left: 120px;
-  padding-bottom: 125px;
+.story-image img {
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
-.about-section .image-column .inner-column:before{
-  position: absolute;
-  left: -75px;
-  top: 65px;
-  height: 520px;
-  width: 520px;
-  background-image:url(https://i.ibb.co/fxJ1jtC/about-circle-1.png);
-  content: "";
+/* Values Section */
+.values-section {
+  padding: 100px 0;
+  background: white;
 }
 
-.about-section .image-column .image-1{
-  position: relative;
-}
-
-.about-section .image-column .image-2{
-  position: absolute;
-  left: 0;
-  bottom: 0;
-}
-
-.about-section .image-column .image-2 img,
-.about-section .image-column .image-1 img{
-  box-shadow: 0 30px 50px rgba(8,13,62,.15);
-}
-
-.about-section .image-column .video-link{
-  position: absolute;
-  left: 70px;
-  top: 170px;
-}
-
-.about-section .image-column .video-link .link{
-  position: relative;
-  display: block;
-  font-size: 22px;
-  color: #191e34;
-  font-weight: 400;
+.section-title {
   text-align: center;
-  height: 100px;
-  width: 100px;
-  line-height: 100px;
-  background-color: #ffffff;
+  margin-bottom: 60px;
+}
+
+.section-title h2 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+.section-title p {
+  font-size: 18px;
+  color: #5a6c7d;
+}
+
+.value-card {
+  background: #f8f9fa;
+  padding: 40px 30px;
+  border-radius: 20px;
+  text-align: center;
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.value-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.value-icon {
+  font-size: 48px;
+  color: #667eea;
+  margin-bottom: 20px;
+}
+
+.value-card h3 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+.value-card p {
+  font-size: 16px;
+  color: #5a6c7d;
+  line-height: 1.5;
+}
+
+/* Team Section */
+.team-section {
+  padding: 100px 0;
+  background: #f8f9fa;
+}
+
+.team-member {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.team-member:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.team-member img {
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  box-shadow: 0 30px 50px rgba(8,13,62,.15);
-  -webkit-transition: all 300ms ease;
-  -moz-transition: all 300ms ease;
-  -ms-transition: all 300ms ease;
-  -o-transition: all 300ms ease;
-  transition: all 300ms ease;
+  margin-bottom: 20px;
+  object-fit: cover;
 }
 
-.about-section .image-column .video-link .link:hover{
-  background-color: #191e34;
-  color: #ffffff;
+.team-member h4 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #2c3e50;
 }
 
+.team-member p {
+  font-size: 14px;
+  color: #667eea;
+  font-weight: 500;
+}
 
+/* Why Choose Us Section */
+.why-choose-section {
+  padding: 100px 0;
+  background: white;
+}
+
+.feature-list {
+  padding: 0 20px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.feature-item i {
+  font-size: 24px;
+  color: #667eea;
+  margin-right: 20px;
+  width: 40px;
+  text-align: center;
+}
+
+.feature-item h4 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #2c3e50;
+}
+
+.feature-item p {
+  font-size: 16px;
+  color: #5a6c7d;
+  margin: 0;
+}
+
+/* Contact Section */
+.contact-section {
+  padding: 100px 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.contact-content h2 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.contact-content p {
+  font-size: 18px;
+  margin-bottom: 40px;
+  opacity: 0.9;
+}
+
+.contact-info {
+  margin-bottom: 40px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.contact-item i {
+  font-size: 20px;
+  margin-right: 15px;
+  width: 30px;
+}
+
+.contact-item span {
+  font-size: 16px;
+}
+
+.contact-form .form-group {
+  margin-bottom: 20px;
+}
+
+.contact-form .form-control {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.contact-form .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.contact-form .form-control:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 32px;
+  }
+
+  .hero-stats {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .story-section .row {
+    flex-direction: column-reverse;
+  }
+
+  .feature-item {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .feature-item i {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .contact-section .row {
+    flex-direction: column;
+  }
+}
 </style>
