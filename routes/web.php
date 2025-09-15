@@ -97,15 +97,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 'totalBlogs' => \App\Models\Blog::count(),
                 'adminUsers' => \App\Models\User::where('role', 'admin')->orWhere('is_admin', true)->count(),
             ];
-            
+
             return Inertia::render('admin/Dashboard', [
                 'stats' => $stats
             ]);
         })->name('dashboard');
-        
-        // Add resource routes for managing products and blogs
-        Route::resource('products', ProductController::class);
-        Route::resource('blogs', BlogController::class);
+
+        // Admin-specific routes (products and blogs are already defined globally)
         Route::get('users', function () {
             $users = \App\Models\User::all();
             return Inertia::render('admin/Users', [

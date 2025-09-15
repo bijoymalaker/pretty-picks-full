@@ -30,8 +30,8 @@
                     <div class="form-row">
                         <div class="col-md-12 mb-3">
                             <label for="address">Address</label>
-                            <input type="text" class="form-control" id="address"
-                                placeholder="House number and street address" required v-model="billing.address">
+                            <textarea type="text" class="form-control" id="address"
+                                placeholder="House number and street address" required v-model="billing.address"></textarea>
                         </div>
                     </div>
                     <div class="form-row">
@@ -118,19 +118,9 @@
                             <label class="form-check-label" for="cashOnDelivery">Cash on delivery</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="paymentMethod" id="bkash" value="bkash"
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="onlinePayment" value="onlinePayment"
                                 v-model="paymentMethod">
-                            <label class="form-check-label" for="bkash">bKash Send Money</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="paymentMethod" id="rocket" value="rocket"
-                                v-model="paymentMethod">
-                            <label class="form-check-label" for="rocket">Rocket Send Money</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="paymentMethod" id="nagad" value="nagad"
-                                v-model="paymentMethod">
-                            <label class="form-check-label" for="nagad">Nagad Send Money</label>
+                            <label class="form-check-label" for="onlinePayment">Online Payment</label>
                         </div>
                         <button type="button" class="btn btn-primary btn-block mt-3" @click="placeOrder">Place
                             Order</button>
@@ -170,10 +160,9 @@ const shipToDifferentAddress = ref(false)
 const orderNotes = ref('')
 const paymentMethod = ref('cashOnDelivery')
 
-const placeOrder = () => {
+const placeOrder = async () => {
   // Validate required fields
-  if (!billing.value.name || !billing.value.phone || !billing.value.address ||
-      !billing.value.district || !billing.value.thana) {
+  if (!billing.value.name || !billing.value.phone || !billing.value.address || !billing.value.district || !billing.value.thana) {
     alert('Please fill in all required billing details.')
     return
   }
@@ -188,7 +177,7 @@ const placeOrder = () => {
     return
   }
 
-  // Create form data to submit to /pay
+  // Create form data object
   const formData = {
     billing_info: billing.value,
     shipping_info: shipToDifferentAddress.value ? shipping.value : null,
@@ -203,42 +192,70 @@ const placeOrder = () => {
     }))
   }
 
-  // Create a form element and submit it to mimic the exampleHosted.blade.php behavior
-  const form = document.createElement('form')
-  form.method = 'POST'
-  form.action = '/pay'
+  if (paymentMethod.value === 'onlinePayment') {
+    // Create a form element and submit it to /pay
+    const form = document.createElement('form')
+    form.method = 'POST'
+    form.action = '/pay'
 
-  // Add CSRF token
-  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
-  const csrfInput = document.createElement('input')
-  csrfInput.type = 'hidden'
-  csrfInput.name = '_token'
-  csrfInput.value = csrfToken
-  form.appendChild(csrfInput)
+    // Add CSRF token
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+    const csrfInput = document.createElement('input')
+    csrfInput.type = 'hidden'
+    csrfInput.name = '_token'
+    csrfInput.value = csrfToken
+    form.appendChild(csrfInput)
 
-  // Add form data as hidden inputs
-  Object.keys(formData).forEach(key => {
-    if (typeof formData[key] === 'object' && formData[key] !== null) {
-      // Handle nested objects
-      Object.keys(formData[key]).forEach(subKey => {
+    // Add form data as hidden inputs
+    Object.keys(formData).forEach(key => {
+      if (typeof formData[key] === 'object' && formData[key] !== null) {
+        // Handle nested objects
+        Object.keys(formData[key]).forEach(subKey => {
+          const input = document.createElement('input')
+          input.type = 'hidden'
+          input.name = `${key}[${subKey}]`
+          input.value = formData[key][subKey] || ''
+          form.appendChild(input)
+        })
+      } else {
         const input = document.createElement('input')
         input.type = 'hidden'
-        input.name = `${key}[${subKey}]`
-        input.value = formData[key][subKey] || ''
+        input.name = key
+        input.value = formData[key] || ''
         form.appendChild(input)
-      })
-    } else {
-      const input = document.createElement('input')
-      input.type = 'hidden'
-      input.name = key
-      input.value = formData[key] || ''
-      form.appendChild(input)
-    }
-  })
+      }
+    })
 
-  // Append form to body and submit
-  document.body.appendChild(form)
-  form.submit()
+    // Append form to body and submit
+    document.body.appendChild(form)
+    form.submit()
+  } else if (paymentMethod.value === 'cashOnDelivery') {
+    // Submit order data to /order endpoint via fetch
+    try {
+      const response = await fetch('/order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+        },
+        body: JSON.stringify(formData)
+      })
+
+      if (response.ok) {
+      const data = await response.json(); // ✅ Convert response to JSON
+      if (data.order_id) {
+        window.location.href = `/order-confirmed/${data.order_id}`;
+      } else {
+        alert('Order placed but no order ID returned.');
+      }
+    } else {
+      alert('Failed to place order. Please try again.');
+    }
+    } catch (error) {
+      alert('An error occurred while placing the order.')
+      console.error(error)
+    }
+  }
 }
 </script>
 

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Library\SslCommerz\SslCommerzNotification;
 use Inertia\Inertia;
+use App\Models\Order;
 
 class SslCommerzPaymentController extends Controller
 {
@@ -68,9 +69,9 @@ class SslCommerzPaymentController extends Controller
         $post_data['value_d'] = "ref004";
 
         #Before  going to initiate the payment order status need to insert or update as Pending.
-        $update_product = DB::table('orders')
-            ->where('transaction_id', $post_data['tran_id'])
-            ->updateOrInsert([
+        Order::updateOrCreate(
+            ['transaction_id' => $post_data['tran_id']],
+            [
                 'name' => $post_data['cus_name'],
                 'email' => $post_data['cus_email'],
                 'phone' => $post_data['cus_phone'],
@@ -78,8 +79,10 @@ class SslCommerzPaymentController extends Controller
                 'status' => 'Pending',
                 'address' => $post_data['cus_add1'],
                 'transaction_id' => $post_data['tran_id'],
-                'currency' => $post_data['currency']
-            ]);
+                'currency' => $post_data['currency'],
+               
+            ]
+        );
 
         $sslc = new SslCommerzNotification();
         # initiate(Transaction Data , false: Redirect to SSLCOMMERZ gateway/ true: Show all the Payement gateway here )
@@ -102,11 +105,13 @@ class SslCommerzPaymentController extends Controller
         $sslc = new SslCommerzNotification();
 
         #Check order status in order table against the transaction id or order id.
-        $order_details = DB::table('orders')
-            ->where('transaction_id', $tran_id)
-            ->select('transaction_id', 'status', 'currency', 'amount')->first();
+        $order = Order::where('transaction_id', $tran_id)->first();
 
-        if ($order_details->status == 'Pending') {
+        if (!$order) {
+            return redirect()->route('payment.fail', ['tran_id' => $tran_id]);
+        }
+
+        if ($order->status == 'Pending') {
             $validation = $sslc->orderValidate($request->all(), $tran_id, $amount, $currency);
 
             if ($validation) {
@@ -115,15 +120,13 @@ class SslCommerzPaymentController extends Controller
                 in order table as Processing or Complete.
                 Here you can also sent sms or email for successfull transaction to customer
                 */
-                $update_product = DB::table('orders')
-                    ->where('transaction_id', $tran_id)
-                    ->update(['status' => 'Processing']);
+                $order->update(['status' => 'Processing']);
 
                 // Redirect to success page with order details
                 return redirect()->route('payment.success', ['tran_id' => $tran_id]);
 
             }
-        } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
+        } else if ($order->status == 'Processing' || $order->status == 'Complete') {
             /*
              That means through IPN Order status already updated. Now you can just show the customer that transaction is completed. No need to update database.
              */
@@ -139,18 +142,18 @@ class SslCommerzPaymentController extends Controller
     {
         $tran_id = $request->input('tran_id');
 
-        $order_details = DB::table('orders')
-            ->where('transaction_id', $tran_id)
-            ->select('transaction_id', 'status', 'currency', 'amount')->first();
+        $order = Order::where('transaction_id', $tran_id)->first();
 
-        if ($order_details->status == 'Pending') {
-            $update_product = DB::table('orders')
-                ->where('transaction_id', $tran_id)
-                ->update(['status' => 'Failed']);
+        if (!$order) {
+            return redirect()->route('payment.fail', ['tran_id' => $tran_id]);
+        }
+
+        if ($order->status == 'Pending') {
+            $order->update(['status' => 'Failed']);
 
             return redirect()->route('payment.fail', ['tran_id' => $tran_id]);
 
-        } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
+        } else if ($order->status == 'Processing' || $order->status == 'Complete') {
             return redirect()->route('payment.success', ['tran_id' => $tran_id]);
         } else {
             return redirect()->route('payment.fail', ['tran_id' => $tran_id]);
@@ -161,17 +164,17 @@ class SslCommerzPaymentController extends Controller
     {
         $tran_id = $request->input('tran_id');
 
-        $order_details = DB::table('orders')
-            ->where('transaction_id', $tran_id)
-            ->select('transaction_id', 'status', 'currency', 'amount')->first();
+        $order = Order::where('transaction_id', $tran_id)->first();
 
-        if ($order_details->status == 'Pending') {
-            $update_product = DB::table('orders')
-                ->where('transaction_id', $tran_id)
-                ->update(['status' => 'Canceled']);
+        if (!$order) {
+            return redirect()->route('payment.cancel', ['tran_id' => $tran_id]);
+        }
+
+        if ($order->status == 'Pending') {
+            $order->update(['status' => 'Canceled']);
 
             return redirect()->route('payment.cancel', ['tran_id' => $tran_id]);
-        } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
+        } else if ($order->status == 'Processing' || $order->status == 'Complete') {
             return redirect()->route('payment.success', ['tran_id' => $tran_id]);
         } else {
             return redirect()->route('payment.cancel', ['tran_id' => $tran_id]);
@@ -187,26 +190,27 @@ class SslCommerzPaymentController extends Controller
             $tran_id = $request->input('tran_id');
 
             #Check order status in order tabel against the transaction id or order id.
-            $order_details = DB::table('orders')
-                ->where('transaction_id', $tran_id)
-                ->select('transaction_id', 'status', 'currency', 'amount')->first();
+            $order = Order::where('transaction_id', $tran_id)->first();
 
-            if ($order_details->status == 'Pending') {
+            if (!$order) {
+                echo "Invalid Transaction";
+                return;
+            }
+
+            if ($order->status == 'Pending') {
                 $sslc = new SslCommerzNotification();
-                $validation = $sslc->orderValidate($request->all(), $tran_id, $order_details->amount, $order_details->currency);
+                $validation = $sslc->orderValidate($request->all(), $tran_id, $order->amount ?? $order->total_amount, $order->currency);
                 if ($validation == TRUE) {
                     /*
                     That means IPN worked. Here you need to update order status
                     in order table as Processing or Complete.
                     Here you can also sent sms or email for successful transaction to customer
                     */
-                    $update_product = DB::table('orders')
-                        ->where('transaction_id', $tran_id)
-                        ->update(['status' => 'Processing']);
+                    $order->update(['status' => 'Processing']);
 
                     echo "Transaction is successfully Completed";
                 }
-            } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
+            } else if ($order->status == 'Processing' || $order->status == 'Complete') {
 
                 #That means Order status already updated. No need to udate database.
 
@@ -219,6 +223,43 @@ class SslCommerzPaymentController extends Controller
         } else {
             echo "Invalid Data";
         }
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->all();
+
+        // Generate unique transaction ID for cash on delivery
+        $tran_id = uniqid();
+
+        // Generate order number
+
+        // Create order using Eloquent model
+        $order = Order::create([
+            'payment_method' => $data['payment_method'],
+            'order_notes' => $data['order_notes'] ?? null,
+            'amount' => $data['	amount'],
+            'items' => $data['items'],
+            'status' => 'Pending',
+            'transaction_id' => $tran_id,
+        ]);
+
+        // Return order ID for redirection
+        return response()->json(['order_id' => $order->id]);
+    }
+
+    public function show($order_id)
+    {
+        // Retrieve order details using Eloquent model
+        $order = Order::find($order_id);
+
+        if (!$order) {
+            abort(404, 'Order not found');
+        }
+
+        return Inertia::render('OrderConfirm', [
+            'order' => $order
+        ]);
     }
 
 }
