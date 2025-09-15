@@ -1,12 +1,12 @@
-# Payment Status Pages Fix
+# Fix User Login and Registration
 
-## Completed Tasks
-- [x] Updated SslCommerzPaymentController success method to redirect to Vue payment success page
-- [x] Updated SslCommerzPaymentController fail method to redirect to Vue payment fail page
-- [x] Updated SslCommerzPaymentController cancel method to redirect to Vue payment cancel page
-- [x] Added order ID parameter to success redirects for order details display
+## Tasks
+- [x] Update Register.vue to use Inertia's useForm and submit to backend
+- [x] Change repeatPassword to password_confirmation in Register.vue
+- [x] Remove dummy alert and form reset in Register.vue
+- [x] Fix Login.vue to use Inertia form properly
+- [x] Remove MustVerifyEmail from User model
+- [ ] Test user registration and login functionality
 
-## Next Steps
-- [ ] Test the payment flow to ensure redirects work correctly
-- [ ] Verify that order details are properly displayed on success page
-- [ ] Check that all payment status pages render correctly
+## Completed
+- [x] Analyze the codebase and identify issues

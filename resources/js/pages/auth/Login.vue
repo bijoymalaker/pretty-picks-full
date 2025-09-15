@@ -4,19 +4,19 @@
       <p class="h4 mb-4">Sign in</p>
       <!-- Email input -->
       <div data-mdb-input-init class="form-outline mb-4">
-        <input type="email" id="form2Example1" class="form-control" v-model="email"
-          :class="{ 'is-invalid': emailError }" required />
+        <input type="email" id="form2Example1" class="form-control" v-model="form.email"
+          :class="{ 'is-invalid': form.errors.email }" required />
         <label class="form-label" for="form2Example1">Email address</label>
-        <div v-if="emailError" class="invalid-feedback">{{ emailError }}</div>
+        <div v-if="form.errors.email" class="invalid-feedback">{{ form.errors.email }}</div>
       </div>
 
       <!-- Password input -->
       <div data-mdb-input-init class="form-outline mb-4">
-        <input type="password" id="form2Example2" class="form-control" v-model="password"
-          :class="{ 'is-invalid': passwordError }" required />
+        <input type="password" id="form2Example2" class="form-control" v-model="form.password"
+          :class="{ 'is-invalid': form.errors.password }" required />
         <label class="form-label" for="form2Example2">Password</label>
-        <div v-if="passwordError" class="invalid-feedback">
-          {{ passwordError }}
+        <div v-if="form.errors.password" class="invalid-feedback">
+          {{ form.errors.password }}
         </div>
       </div>
 
@@ -25,7 +25,7 @@
         <div class="col d-flex justify-content-center">
           <!-- Checkbox -->
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" v-model="remember" id="form2Example31" />
+            <input class="form-check-input" type="checkbox" v-model="form.remember" id="form2Example31" />
             <label class="form-check-label" for="form2Example31">
               Remember me
             </label>
@@ -67,7 +67,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
 import { Link, useForm } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
 import AppLayouts from '../../layout/AppLayouts.vue'
@@ -75,12 +74,6 @@ defineOptions({
   name: 'Login',
   layout: AppLayouts,
 })
-
-const email = ref("")
-const password = ref("")
-const remember = ref(false)
-const emailError = ref("")
-const passwordError = ref("")
 
 const form = useForm({
   email: '',
@@ -94,41 +87,25 @@ function validateEmail(email: string): boolean {
 }
 
 function handleSubmit() {
-  emailError.value = ""
-  passwordError.value = ""
   let valid = true
-  
-  if (!email.value) {
-    emailError.value = "Email is required."
+
+  if (!form.email) {
     valid = false
-  } else if (!validateEmail(email.value)) {
-    emailError.value = "Please enter a valid email address."
+  } else if (!validateEmail(form.email)) {
     valid = false
   }
-  
-  if (!password.value) {
-    passwordError.value = "Password is required."
+
+  if (!form.password) {
     valid = false
-  } else if (password.value.length < 6) {
-    passwordError.value = "Password must be at least 6 characters."
+  } else if (form.password.length < 6) {
     valid = false
   }
-  
+
   if (valid) {
-    // Update form data
-    form.email = email.value
-    form.password = password.value
-    form.remember = remember.value
-    
     // Submit form using Inertia
     form.post(route('login'), {
       onError: (errors) => {
-        if (errors.email) {
-          emailError.value = errors.email
-        }
-        if (errors.password) {
-          passwordError.value = errors.password
-        }
+        // Errors are handled by Inertia form
       }
     })
   }
