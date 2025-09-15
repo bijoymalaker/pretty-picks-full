@@ -5,9 +5,12 @@
             <div class="row">
                 <div class="col-12 mb-4">
                     <h1 class="text-center mb-5">Our Blog</h1>
-                    <Link :href="route('blogs.index')" class="btn btn-primary text-center">
+                    <div v-if="$page.props.auth.user && $page.props.auth.user.role === 'user'" class="text-end mb-3">
+                        <Link :href="route('blogs.index')" class="btn btn-primary text-center">
                         <i class="bi bi-plus"></i> Manage Blog
                     </Link>
+                    </div>
+                    
                 </div>
             </div>
             <div class="row">
