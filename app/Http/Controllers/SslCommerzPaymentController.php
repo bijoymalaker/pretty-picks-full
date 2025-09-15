@@ -232,16 +232,16 @@ class SslCommerzPaymentController extends Controller
         // Generate unique transaction ID for cash on delivery
         $tran_id = uniqid();
 
-        // Generate order number
-
         // Create order using Eloquent model
         $order = Order::create([
-            'payment_method' => $data['payment_method'],
-            'order_notes' => $data['order_notes'] ?? null,
-            'amount' => $data['	amount'],
-            'items' => $data['items'],
+            'name' => $data['billing_info']['name'],
+            'email' => $data['billing_info']['email'] ?? null,
+            'phone' => $data['billing_info']['phone'],
+            'amount' => $data['total_amount'],
+            'address' => $data['billing_info']['address'],
             'status' => 'Pending',
             'transaction_id' => $tran_id,
+            'currency' => 'BDT',
         ]);
 
         // Return order ID for redirection
@@ -257,7 +257,7 @@ class SslCommerzPaymentController extends Controller
             abort(404, 'Order not found');
         }
 
-        return Inertia::render('OrderConfirm', [
+        return Inertia::render('OrderConfirmed', [
             'order' => $order
         ]);
     }

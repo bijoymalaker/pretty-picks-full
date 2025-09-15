@@ -13,15 +13,16 @@
                             <p class="mb-0">Your order has been successfully placed and is being processed.</p>
                         </div>
 
-                        <!-- Order Details -->
+                        <!-- Order Information -->
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <h5>Order Information</h5>
-                                <p><strong>Order Number:</strong> {{ order.order_number }}</p>
-                                <p><strong>Order Date:</strong> {{ order.formatted_date }}</p>
-                                <p><strong>Total Amount:</strong> {{ order.formatted_total }}</p>
-                                <p><strong>Payment Method:</strong> {{ formatPaymentMethod(order.payment_method) }}</p>
-                                <p><strong>Status:</strong> <span class="badge bg-primary">{{ order.status }}</span></p>
+                                <p><strong>Order ID:</strong> {{ order.id }}</p>
+                                <p><strong>Order Date:</strong> {{ formatDate(order.created_at) }}</p>
+                                <p><strong>Total Amount:</strong> ৳ {{ order.amount }}</p>
+                                <p><strong>Status:</strong>
+                                    <span class="badge bg-primary">{{ order.status || 'Pending' }}</span>
+                                </p>
                             </div>
                         </div>
 
@@ -31,78 +32,24 @@
                                 <h5>Billing Information</h5>
                                 <div class="card">
                                     <div class="card-body">
-                                        <p><strong>Name:</strong> {{ order.billing_info.name }}</p>
-                                        <p><strong>Phone:</strong> {{ order.billing_info.phone }}</p>
-                                        <p><strong>Address:</strong> {{ order.billing_info.address }}</p>
-                                        <p><strong>District:</strong> {{ order.billing_info.district }}</p>
-                                        <p><strong>Thana/Upazela:</strong> {{ order.billing_info.thana }}</p>
-                                        <p v-if="order.billing_info.email"><strong>Email:</strong> {{ order.billing_info.email }}</p>
+                                        <p><strong>Name:</strong> {{ order.name }}</p>
+                                        <p><strong>Phone:</strong> {{ order.phone }}</p>
+                                        <p><strong>Address:</strong> {{ order.address }}</p>
+                                        <p v-if="order.email"><strong>Email:</strong> {{ order.email }}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Shipping Information (if different) -->
-                        <div class="row mb-4" v-if="order.shipping_info && order.shipping_info.address">
+                        <!-- Payment Information -->
+                        <div class="row mb-4">
                             <div class="col-12">
-                                <h5>Shipping Information</h5>
+                                <h5>Payment Information</h5>
                                 <div class="card">
                                     <div class="card-body">
-                                        <p><strong>Shipping Address:</strong> {{ order.shipping_info.address }}</p>
+                                        <p><strong>Transaction ID:</strong> {{ order.transaction_id || 'N/A' }}</p>
+                                        <p><strong>Currency:</strong> {{ order.currency || 'BDT' }}</p>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Order Notes -->
-                        <div class="row mb-4" v-if="order.order_notes">
-                            <div class="col-12">
-                                <h5>Order Notes</h5>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <p>{{ order.order_notes }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Order Items -->
-                        <div class="row">
-                            <div class="col-12">
-                                <h5>Order Items</h5>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th>Product</th>
-                                                <th>Quantity</th>
-                                                <th>Price</th>
-                                                <th>Subtotal</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="(item, index) in order.items" :key="index">
-                                                <td>{{ item.name }}</td>
-                                                <td>{{ item.qty }}</td>
-                                                <td>৳ {{ item.price }}</td>
-                                                <td>৳ {{ item.price * item.qty }}</td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
-                                                <td><strong>৳ {{ calculateSubtotal() }}</strong></td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="3" class="text-end"><strong>Delivery Charge:</strong></td>
-                                                <td><strong>৳ 70</strong></td>
-                                            </tr>
-                                            <tr class="table-success">
-                                                <td colspan="3" class="text-end"><strong>Total:</strong></td>
-                                                <td><strong>৳ {{ order.total_amount }}</strong></td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -113,7 +60,7 @@
                                 <div class="alert alert-info" role="alert">
                                     <h6 class="alert-heading">What's Next?</h6>
                                     <p class="mb-2">You will receive a confirmation call shortly.</p>
-                                    <p class="mb-0">For any queries, please contact us at: <strong>{{ order.billing_info.phone }}</strong></p>
+                                    <p class="mb-0">For any queries, please contact us at: <strong>{{ order.phone }}</strong></p>
                                 </div>
                                 <router-link to="/" class="btn btn-primary me-2">Continue Shopping</router-link>
                                 <router-link to="/shop" class="btn btn-outline-secondary">Browse More Products</router-link>
@@ -141,18 +88,16 @@ const props = defineProps({
   }
 })
 
-const formatPaymentMethod = (method) => {
-  const methods = {
-    cashOnDelivery: 'Cash on Delivery',
-    bkash: 'bKash Send Money',
-    rocket: 'Rocket Send Money',
-    nagad: 'Nagad Send Money'
-  }
-  return methods[method] || method
-}
-
-const calculateSubtotal = () => {
-  return props.order.items.reduce((total, item) => total + (item.price * item.qty), 0)
+// Helper function: Format Date
+const formatDate = (date) => {
+  if (!date) return ''
+  return new Date(date).toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
 }
 </script>
 

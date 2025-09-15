@@ -242,15 +242,16 @@ const placeOrder = async () => {
       })
 
       if (response.ok) {
-      const data = await response.json(); // ✅ Convert response to JSON
-      if (data.order_id) {
-        window.location.href = `/order-confirmed/${data.order_id}`;
+        const data = await response.json(); // ✅ Convert response to JSON
+        if (data.order_id) {
+          cartStore.clearCart(); // Clear the cart after successful order
+          window.location.href = `/order-confirmed/${data.order_id}`;
+        } else {
+          alert('Order placed but no order ID returned.');
+        }
       } else {
-        alert('Order placed but no order ID returned.');
+        alert('Failed to place order. Please try again.');
       }
-    } else {
-      alert('Failed to place order. Please try again.');
-    }
     } catch (error) {
       alert('An error occurred while placing the order.')
       console.error(error)
