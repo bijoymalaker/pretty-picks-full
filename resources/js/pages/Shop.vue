@@ -43,7 +43,10 @@
                             <label for="inStock">In Stock</label>
                         </div>
                     </div>
-                    <Link :href="route('products.index')" class="btn btn-primary w-100">Manage Products</Link>
+                    <div v-if="$page.props.auth.user && $page.props.auth.user.role === 'admin'">
+                        <Link :href="route('products.index')" class="btn btn-primary w-100">Manage Products</Link>
+                    </div>
+                    
                 </aside>
                 <!-- Main Content -->
                 <main class="col-md-9">

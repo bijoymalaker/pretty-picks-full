@@ -79,7 +79,7 @@ import Articals from '../components/Articals.vue';
 // Banner Images import 
 import banner1 from '../assets/images/banner1.jpg';
 import banner2 from '../assets/images/banner2.jpg';
-import banner3 from '../assets/images/banner3.jpg';
+import banner3 from '../assets/images/portrait.jpg';
 
 // Products image import 
 import jacket1 from '../assets/images/products/jacket1.jpg';
