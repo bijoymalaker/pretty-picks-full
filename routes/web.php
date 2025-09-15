@@ -124,6 +124,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 'blogs' => $blogs
             ]);
         })->name('blogs.list');
+
+        // Resource routes for admin management
+        Route::resource('products', ProductController::class);
+        Route::resource('blogs', BlogController::class);
     });
 });
 
