@@ -21,13 +21,13 @@
               </Link>
             </li>
             <li class="nav-item">
-              <Link :href="route('admin.products')" class="nav-link text-white">
+              <Link :href="route('admin.products.index')" class="nav-link text-white">
                 <i class="fas fa-shopping-bag me-2"></i>
                 Products
               </Link>
             </li>
             <li class="nav-item">
-              <Link :href="route('admin.blogs')" class="nav-link text-white">
+              <Link :href="route('admin.blogs.index')" class="nav-link text-white">
                 <i class="fas fa-blog me-2"></i>
                 Blogs
               </Link>

@@ -19,12 +19,12 @@
               </Link>
             </li>
             <li class="nav-item">
-              <Link :href="route('admin.products')" class="nav-link text-white">
+              <Link :href="route('admin.products.index')" class="nav-link text-white">
                 Products
               </Link>
             </li>
             <li class="nav-item">
-              <Link :href="route('admin.blogs')" class="nav-link text-white active">
+              <Link :href="route('admin.blogs.index')" class="nav-link text-white active">
                 Blogs
               </Link>
             </li>

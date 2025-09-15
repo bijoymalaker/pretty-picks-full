@@ -21,13 +21,13 @@
               </Link>
             </li>
             <li class="nav-item">
-              <Link :href="route('admin.products')" class="nav-link text-white" :class="{ 'active': $page.url === '/admin/products' }">
+              <Link :href="route('admin.products.index')" class="nav-link text-white" :class="{ 'active': $page.url === '/admin/products' }">
                 <i class="fas fa-shopping-bag me-2"></i>
                 Products
               </Link>
             </li>
             <li class="nav-item">
-              <Link :href="route('admin.blogs')" class="nav-link text-white" :class="{ 'active': $page.url === '/admin/blogs' }">
+              <Link :href="route('admin.blogs.index')" class="nav-link text-white" :class="{ 'active': $page.url === '/admin/blogs' }">
                 <i class="fas fa-blog me-2"></i>
                 Blogs
               </Link>
@@ -150,22 +150,22 @@
                       </Link>
                     </div>
                     <div class="col-md-3 mb-3">
-                      <Link :href="route('admin.products')" class="btn btn-success btn-block">
+                      <Link :href="route('admin.products.index')" class="btn btn-success btn-block">
                         <i class="fas fa-shopping-bag me-2"></i>
                         Manage Products
                       </Link>
                     </div>
                     <div class="col-md-3 mb-3">
-                      <Link :href="route('admin.blogs')" class="btn btn-info btn-block">
+                      <Link :href="route('admin.blogs.index')" class="btn btn-info btn-block">
                         <i class="fas fa-blog me-2"></i>
                         Manage Blogs
                       </Link>
                     </div>
                     <div class="col-md-3 mb-3">
-                      <Link :href="route('products.create')" class="btn btn-warning btn-block">
-                        <i class="fas fa-plus me-2"></i>
-                        Add Product
-                      </Link>
+                        <Link :href="route('admin.products.create')" class="btn btn-warning btn-block">
+                          <i class="fas fa-plus me-2"></i>
+                          Add Product
+                        </Link>
                     </div>
                   </div>
                 </div>
