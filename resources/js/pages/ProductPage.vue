@@ -35,7 +35,7 @@
                     </div>
                     
                     <div class="product-price mb-4">
-                        <h3 class="text-primary">${{ formatPrice(product.price) }}</h3>
+                        <h3 class="text-primary">৳{{ formatPrice(product.price) }}</h3>
                     </div>
                     
                     <div class="product-description mb-4">
@@ -66,7 +66,7 @@
                                     <div class="accordion-body">
                                         <ul>
                                             <li><strong>Collection:</strong> {{ product.collection || 'N/A' }}</li>
-                                            <li><strong>Price:</strong> ${{ formatPrice(product.price) }}</li>
+                                            <li><strong>Price:</strong> ৳{{ formatPrice(product.price) }}</li>
                                             <li><strong>Availability:</strong> In Stock</li>
                                         </ul>
                                     </div>

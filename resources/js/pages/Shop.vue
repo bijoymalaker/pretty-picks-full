@@ -23,14 +23,14 @@
                     <div class="mb-4">
                         <h5>Filter by Price</h5>
                         <div>
-                            <label>Min Price: ${{ priceRange[0] }}</label>
+                            <label>Min Price: ৳{{ priceRange[0] }}</label>
                             <input type="range" class="form-range" min="0" max="2000" step="50" v-model="priceRange[0]" />
                         </div>
                         <div>
-                            <label>Max Price: ${{ priceRange[1] }}</label>
+                            <label>Max Price: ৳{{ priceRange[1] }}</label>
                             <input type="range" class="form-range" min="0" max="2000" step="50" v-model="priceRange[1]" />
                         </div>
-                        <p>Price Range: ${{ priceRange[0] }} - ${{ priceRange[1] }}</p>
+                        <p>Price Range: ৳{{ priceRange[0] }} - ৳{{ priceRange[1] }}</p>
                     </div>
                     <div class="mb-4">
                         <h5>Stock Status</h5>
@@ -58,7 +58,7 @@
                                     <h5 class="card-title">{{ product.name }}</h5>
                                     <p class="card-text text-capitalize">{{ product.collection || 'Uncategorized' }}</p>
                                     <p class="text-muted">
-                                        ${{ Math.floor(Number(product.price)) }}
+                                        ৳{{ Math.floor(Number(product.price)) }}
                                     </p>
                                     <div class="d-flex gap-2">
                                         <Link :href="route('productPage', { id: product.id })" class="btn btn-primary btn-sm flex-fill">View Details</Link>

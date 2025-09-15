@@ -154,7 +154,7 @@
                   <i class="fas fa-truck"></i>
                   <div>
                     <h4>Free Shipping</h4>
-                    <p>Free delivery on orders over $50</p>
+                    <p>Free delivery on orders over ৳50</p>
                   </div>
                 </div>
                 <div class="feature-item">

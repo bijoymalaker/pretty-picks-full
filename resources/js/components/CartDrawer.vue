@@ -23,8 +23,8 @@
             />
             <div class="cart-item-details">
               <div class="cart-item-name">{{ item.name }}</div>
-              <div class="cart-item-price">${{ formatPrice(item.price) }}</div>
-              
+              <div class="cart-item-price">৳{{ formatPrice(item.price) }}</div>
+
               <div class="cart-item-controls">
                 <button 
                   class="btn btn-sm btn-outline-secondary" 
@@ -52,7 +52,7 @@
               </div>
               
               <div class="cart-item-subtotal">
-                Subtotal: ${{ formatPrice(item.price * item.qty) }}
+                Subtotal: ৳{{ formatPrice(item.price * item.qty) }}
               </div>
             </div>
           </div>
@@ -63,7 +63,7 @@
         <div class="cart-summary mb-3">
           <div class="d-flex justify-content-between">
             <strong>Total:</strong>
-            <strong>${{ formatPrice(cartTotal) }}</strong>
+            <strong>৳{{ formatPrice(cartTotal) }}</strong>
           </div>
         </div>
         

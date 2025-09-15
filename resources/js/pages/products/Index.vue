@@ -95,7 +95,7 @@ function deleteProduct(productId) {
                 </div>
                 <div class="card-body d-flex flex-column">
                   <h5 class="card-title">{{ product.name }}</h5>
-                  <p class="card-text text-muted mb-1">${{ product.price }}</p>
+                  <p class="card-text text-muted mb-1">৳{{ product.price }}</p>
                   <p class="card-text text-muted"><small>Collection: {{ product.collection }}</small></p>
                   <div class="mt-auto d-flex justify-content-end">
                     <Link :href="`/products/${product.id}/edit`" class="btn btn-sm btn-outline-secondary me-2">Edit</Link>

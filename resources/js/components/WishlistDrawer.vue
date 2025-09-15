@@ -23,8 +23,8 @@
             />
             <div class="drawer-item-details">
               <div class="drawer-item-name">{{ item.name }}</div>
-              <div class="drawer-item-price">${{ formatPrice(item.price) }}</div>
-              
+              <div class="drawer-item-price">৳{{ formatPrice(item.price) }}</div>
+
               <div class="drawer-item-actions mt-2">
                 <button 
                   class="btn btn-sm btn-primary me-2" 

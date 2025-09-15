@@ -85,7 +85,7 @@
                     <tr v-for="product in products" :key="product.id">
                       <td>{{ product.id }}</td>
                       <td>{{ product.name }}</td>
-                      <td>${{ product.price }}</td>
+                      <td>৳{{ product.price }}</td>
                       <td>{{ product.collection }}</td>
                       <td>{{ new Date(product.created_at).toLocaleDateString() }}</td>
                       <td>
